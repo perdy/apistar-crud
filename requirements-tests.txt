@@ -1,0 +1,7 @@
+-r requirements.txt
+coverage
+pytest
+pytest-xdist
+pytest-cov
+prospector
+tox

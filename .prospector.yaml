@@ -1,0 +1,16 @@
+output-format: grouped
+
+strictness: high
+test-warnings: false
+doc-warnings: false
+autodetect: true
+member-warnings: false
+
+ignore-paths:
+  - docs
+  - build
+  - tests
+  - build.py
+
+pylint:
+  run: false
