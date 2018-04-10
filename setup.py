@@ -29,7 +29,6 @@ with open(os.path.join(BASE_DIR, 'README.rst'), encoding='utf-8') as f:
 
 _CLASSIFIERS = (
     'Development Status :: 5 - Production/Stable',
-    'Framework :: API Star',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     'Natural Language :: English',

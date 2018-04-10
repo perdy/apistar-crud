@@ -6,7 +6,7 @@ python:
 install:
   - pip install tox
   - pip install tox-travis
-  - pip install python-coveralls
+  - pip install codecov
 script: tox
 after_success:
-  - coveralls
+  - codecov -f .test_report/coverage.xml
