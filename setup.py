@@ -28,7 +28,7 @@ with open(os.path.join(BASE_DIR, 'README.rst'), encoding='utf-8') as f:
     _LONG_DESCRIPTION = f.read()
 
 _CLASSIFIERS = (
-    'Development Status :: 4 - Beta',
+    'Development Status :: 5 - Production/Stable',
     'Framework :: API Star',
     'Intended Audience :: Developers',
     'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
@@ -41,11 +41,13 @@ _CLASSIFIERS = (
 
 _KEYWORDS = ' '.join([
     'python',
-    'command',
-    'cli',
-    'interface',
-    'run',
-    'script',
+    'apistar',
+    'api',
+    'resource',
+    'crud',
+    'async',
+    'django',
+    'sqlalchemy',
 ])
 
 setup(

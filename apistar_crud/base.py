@@ -3,7 +3,7 @@ from typing import Any, Dict, Iterable
 from apistar import Route
 
 
-class CRUDResource(type):
+class BaseResource(type):
     METHODS = {
         'list': ('/', 'GET'),  # List resource collection
         'replace': ('/', 'PUT'),  # Replace resource entire collection with a new one
@@ -45,7 +45,35 @@ class CRUDResource(type):
 
         for method in methods:
             try:
-                getattr(mcs, 'add_{}'.format(method))(namespace, model, type)
+                getattr(mcs, 'add_{}'.format(method))(namespace, model, type_)
             except AttributeError:
                 raise AttributeError('Invalid method "{}", must be one of: {}.'.format(
                     method, ', '.join(mcs.AVAILABLE_METHODS)))
+
+    @classmethod
+    def add_create(mcs, namespace: Dict[str, Any], model, type_):
+        raise NotImplementedError
+
+    @classmethod
+    def add_retrieve(mcs, namespace: Dict[str, Any], model, type_):
+        raise NotImplementedError
+
+    @classmethod
+    def add_update(mcs, namespace: Dict[str, Any], model, type_):
+        raise NotImplementedError
+
+    @classmethod
+    def add_delete(mcs, namespace: Dict[str, Any], model, type_):
+        raise NotImplementedError
+
+    @classmethod
+    def add_list(mcs, namespace: Dict[str, Any], model, type_):
+        raise NotImplementedError
+
+    @classmethod
+    def add_replace(mcs, namespace: Dict[str, Any], model, type_):
+        raise NotImplementedError
+
+    @classmethod
+    def add_drop(mcs, namespace: Dict[str, Any], model, type_):
+        raise NotImplementedError

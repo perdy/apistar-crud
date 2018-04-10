@@ -1,93 +1,99 @@
 from typing import Any, Dict, List
 
-from apistar import Response
+from apistar import Response, typesystem
 from apistar.backends.sqlalchemy_backend import Session
 from apistar.exceptions import NotFound
 
-from apistar_crud.base import CRUDResource
+from apistar_crud.base import BaseResource
 
 
-class SQLAlchemyCRUDResource(CRUDResource):
+class Resource(BaseResource):
     @classmethod
     def add_create(mcs, namespace: Dict[str, Any], model, type_):
-        async def create(session: Session, element: type_) -> Response:
+        def create(session: Session, element: type_) -> Response:
             """
             Create a new element for this resource.
             """
-            node = model(**element)
-            session.add(node)
+            record = model(**element)
+            session.add(record)
             session.flush()
-            return Response({'id': node.id}, status=201)
+            return Response(type_(record), status=201)
 
         namespace['create'] = create
 
     @classmethod
     def add_retrieve(mcs, namespace: Dict[str, Any], model, type_):
-        async def retrieve(session: Session, element_id: str) -> type_:
+        def retrieve(session: Session, element_id: str) -> type_:
             """
             Retrieve an element of this resource.
             """
-            node = session.query(model).get(element_id)
-            if node is None:
+            record = session.query(model).get(element_id)
+            if record is None:
                 raise NotFound
 
-            return type_(node)
+            return type_(record)
 
         namespace['retrieve'] = retrieve
 
     @classmethod
     def add_update(mcs, namespace: Dict[str, Any], model, type_):
-        async def update(session: Session, element_id: str, element: type_) -> Response:
+        def update(session: Session, element_id: str, element: type_) -> Response:
             """
             Update an element of this resource.
             """
-            node = session.query(model).filter(id=element_id).update(element)
-            session.flush()
-            return Response({'id': node.id}, status=200)
+            record = session.query(model).get(element_id)
+            if record is None:
+                raise NotFound
+
+            for k, value in element.items():
+                setattr(record, k, value)
+
+            return Response(type_(record), status=200)
 
         namespace['update'] = update
 
     @classmethod
     def add_delete(mcs, namespace: Dict[str, Any], model, type_):
-        async def delete(session: Session, element_id: str):
+        def delete(session: Session, element_id: str):
             """
             Delete an element of this resource.
             """
-            session.query(model).filter(id=element_id).delete()
+            session.query(model).filter_by(id=element_id).delete()
 
         namespace['delete'] = delete
 
     @classmethod
     def add_list(mcs, namespace: Dict[str, Any], model, type_):
-        def list(session: Session) -> List[type_]:
+        def list_(session: Session) -> List[type_]:
             """
             List resource collection.
             """
-            return [type_(node) for node in session.query(model).all()]
+            return [type_(record) for record in session.query(model).all()]
 
-        namespace['list'] = list
+        namespace['list'] = list_
 
     @classmethod
     def add_replace(mcs, namespace: Dict[str, Any], model, type_):
-        async def replace(session: Session, collection: List[type_]) -> List[type_]:
+        def replace(session: Session, collection: typesystem.array(items=type_)) -> List[type_]:
             """
-            Replace resource entire collection with a new one.
+            Replace resource collection with a new one.
             """
+            print(collection)
             session.query(model).delete()
             session.add_all([model(**element) for element in collection])
             session.flush()
-            return [type_(node) for node in session.query(model).all()]
+            return [type_(record) for record in session.query(model).all()]
 
         namespace['replace'] = replace
 
     @classmethod
     def add_drop(mcs, namespace: Dict[str, Any], model, type_):
-        async def drop(session: Session) -> Dict[str, int]:
+        def drop(session: Session) -> Response:
             """
-            Drop resource entire collection.
+            Drop resource collection.
             """
-            num_nodes = session.query(model).count()
+            num_records = session.query(model).count()
             session.query(model).delete()
-            return {'deleted': num_nodes}
+            return Response({'deleted': num_records}, status=204)
 
         namespace['drop'] = drop

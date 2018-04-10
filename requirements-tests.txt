@@ -1,7 +1,16 @@
 -r requirements.txt
+
+## CLI
+clinner
+
+## Tests
 coverage
 pytest
 pytest-xdist
 pytest-cov
 prospector
 tox
+
+## Backends
+sqlalchemy
+django

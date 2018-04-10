@@ -13,4 +13,6 @@ ignore-paths:
   - build.py
 
 pylint:
-  run: false
+  options:
+    max-line-length: 120
+    max-args: 8
