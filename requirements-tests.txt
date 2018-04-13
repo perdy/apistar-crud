@@ -13,4 +13,5 @@ tox
 
 ## Backends
 sqlalchemy
+apistar-sqlalchemy
 django

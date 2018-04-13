@@ -1,5 +1,5 @@
 import pytest
-from apistar import Route, typesystem
+from apistar import types, validators
 
 # Fake model
 from apistar_crud.sqlalchemy import Resource
@@ -10,11 +10,9 @@ class PuppyModel:
     name = 'Canna'
 
 
-class PuppyType(typesystem.Object):
-    properties = {
-        'id': typesystem.Integer,
-        'name': typesystem.String
-    }
+class PuppyType(types.Type):
+    id = validators.Integer,
+    name = validators.String
 
 
 class TestCaseBaseCRUDResource:
@@ -39,10 +37,10 @@ class TestCaseBaseCRUDResource:
         assert hasattr(resource, 'delete')
         assert hasattr(resource, 'list')
         assert len(resource.routes) == 5
-        assert [route.view for route in resource.routes] == \
+        assert [route.handler for route in resource.routes] == \
                [resource.create, resource.retrieve, resource.update, resource.delete, resource.list]
 
-    @pytest.mark.parametrize('resource', [('create', 'retrieve', 'update', 'delete', 'list', 'replace', 'drop')],
+    @pytest.mark.parametrize('resource', [('create', 'retrieve', 'update', 'delete', 'list', 'drop')],
                              indirect=['resource'])
     def test_new_explicit_methods(self, resource):
         assert hasattr(resource, 'create')
@@ -50,12 +48,10 @@ class TestCaseBaseCRUDResource:
         assert hasattr(resource, 'update')
         assert hasattr(resource, 'delete')
         assert hasattr(resource, 'list')
-        assert hasattr(resource, 'replace')
         assert hasattr(resource, 'drop')
-        assert len(resource.routes) == 7
-        assert [route.view for route in resource.routes] == \
-               [resource.create, resource.retrieve, resource.update, resource.delete, resource.list, resource.replace,
-                resource.drop]
+        assert len(resource.routes) == 6
+        assert [route.handler for route in resource.routes] == \
+               [resource.create, resource.retrieve, resource.update, resource.delete, resource.list, resource.drop]
 
     def test_new_no_model(self):
         with pytest.raises(AttributeError):

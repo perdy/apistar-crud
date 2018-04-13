@@ -17,7 +17,6 @@ The resources are classes with a default implementation for **methods**:
 * `update`: Update (partially or fully) an element of this resource.
 * `delete`: Delete an element of this resource.
 * `list`: List resource collection.
-* `replace`: Replace resource collection with a new one.
 * `drop`: Drop resource collection.
 
 ----
@@ -32,7 +31,6 @@ retrieve GET    /{element_id}/
 update   PUT    /{element_id}/
 delete   DELETE /{element_id}/
 list     GET    /
-replace  PUT    /
 drop     DELETE /
 ======== ====== ==============
 
@@ -75,7 +73,7 @@ Now create your resource:
     class PuppyResource(metaclass=Resource):
         model = PuppyModel
         type = PuppyType
-        methods = ('create', 'retrieve', 'update', 'delete', 'list', 'replace', 'drop')
+        methods = ('create', 'retrieve', 'update', 'delete', 'list', 'drop')
 
 The resource generates his own routes, so you can add it to your main *routes.py*:
 

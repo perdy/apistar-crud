@@ -6,7 +6,6 @@ from apistar import Route
 class BaseResource(type):
     METHODS = {
         'list': ('/', 'GET'),  # List resource collection
-        'replace': ('/', 'PUT'),  # Replace resource entire collection with a new one
         'drop': ('/', 'DELETE'),  # Drop resource entire collection
         'create': ('/', 'POST'),  # Create a new element for this resource
         'retrieve': ('/{element_id}/', 'GET'),  # Retrieve an element of this resource
@@ -68,10 +67,6 @@ class BaseResource(type):
 
     @classmethod
     def add_list(mcs, namespace: Dict[str, Any], model, type_):
-        raise NotImplementedError
-
-    @classmethod
-    def add_replace(mcs, namespace: Dict[str, Any], model, type_):
         raise NotImplementedError
 
     @classmethod

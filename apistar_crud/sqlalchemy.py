@@ -1,8 +1,8 @@
 from typing import Any, Dict, List
 
-from apistar import Response, typesystem
-from apistar.backends.sqlalchemy_backend import Session
+from apistar import http
 from apistar.exceptions import NotFound
+from sqlalchemy.orm import Session
 
 from apistar_crud.base import BaseResource
 
@@ -10,14 +10,14 @@ from apistar_crud.base import BaseResource
 class Resource(BaseResource):
     @classmethod
     def add_create(mcs, namespace: Dict[str, Any], model, type_):
-        def create(session: Session, element: type_) -> Response:
+        def create(session: Session, element: type_) -> http.JSONResponse:
             """
             Create a new element for this resource.
             """
             record = model(**element)
             session.add(record)
             session.flush()
-            return Response(type_(record), status=201)
+            return http.JSONResponse(type_(record), status_code=201)
 
         namespace['create'] = create
 
@@ -37,7 +37,7 @@ class Resource(BaseResource):
 
     @classmethod
     def add_update(mcs, namespace: Dict[str, Any], model, type_):
-        def update(session: Session, element_id: str, element: type_) -> Response:
+        def update(session: Session, element_id: str, element: type_) -> http.JSONResponse:
             """
             Update an element of this resource.
             """
@@ -48,7 +48,7 @@ class Resource(BaseResource):
             for k, value in element.items():
                 setattr(record, k, value)
 
-            return Response(type_(record), status=200)
+            return http.JSONResponse(type_(record), status_code=200)
 
         namespace['update'] = update
 
@@ -59,6 +59,7 @@ class Resource(BaseResource):
             Delete an element of this resource.
             """
             session.query(model).filter_by(id=element_id).delete()
+            return http.JSONResponse(None, status_code=204)
 
         namespace['delete'] = delete
 
@@ -73,27 +74,13 @@ class Resource(BaseResource):
         namespace['list'] = list_
 
     @classmethod
-    def add_replace(mcs, namespace: Dict[str, Any], model, type_):
-        def replace(session: Session, collection: typesystem.array(items=type_)) -> List[type_]:
-            """
-            Replace resource collection with a new one.
-            """
-            print(collection)
-            session.query(model).delete()
-            session.add_all([model(**element) for element in collection])
-            session.flush()
-            return [type_(record) for record in session.query(model).all()]
-
-        namespace['replace'] = replace
-
-    @classmethod
     def add_drop(mcs, namespace: Dict[str, Any], model, type_):
-        def drop(session: Session) -> Response:
+        def drop(session: Session) -> http.JSONResponse:
             """
             Drop resource collection.
             """
             num_records = session.query(model).count()
             session.query(model).delete()
-            return Response({'deleted': num_records}, status=204)
+            return http.JSONResponse({'deleted': num_records}, status_code=204)
 
         namespace['drop'] = drop

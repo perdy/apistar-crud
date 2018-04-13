@@ -1,68 +1,52 @@
+import os
+
 import pytest
-from apistar import Include, TestClient, typesystem
-from apistar.backends import sqlalchemy_backend
-from apistar.frameworks.asyncio import ASyncIOApp
-from apistar.frameworks.wsgi import WSGIApp
+from apistar import ASyncApp, App, Include, TestClient, types, validators
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
 
 from apistar_crud.sqlalchemy import Resource
 
-Base = declarative_base()
+os.environ['SQLALCHEMY_URL'] = 'sqlite://'
+
+from apistar_sqlalchemy import database
+from apistar_sqlalchemy.components import components
+from apistar_sqlalchemy.event_hooks import event_hooks
 
 
-class PuppyModel(Base):
+class PuppyModel(database.Base):
     __tablename__ = "Puppy"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
 
 
-class PuppyType(typesystem.Object):
-    properties = {
-        'id': typesystem.Integer,
-        'name': typesystem.String
-    }
+class PuppyType(types.Type):
+    id = validators.Integer(allow_null=True, default=None)
+    name = validators.String()
 
 
 class PuppyResource(metaclass=Resource):
     model = PuppyModel
     type = PuppyType
-    methods = ('create', 'retrieve', 'update', 'delete', 'list', 'replace', 'drop')
+    methods = ('create', 'retrieve', 'update', 'delete', 'list', 'drop')
 
 
 routes = [
-    Include('/puppy', PuppyResource.routes, namespace='puppy'),
+    Include('/puppy', 'puppy', PuppyResource.routes),
 ]
 
-settings = {
-    "DATABASE": {
-        "URL": 'sqlite://',
-        "METADATA": Base.metadata
-    }
-}
 
-wsgi_app = WSGIApp(
-    routes=routes,
-    settings=settings,
-    commands=sqlalchemy_backend.commands,
-    components=sqlalchemy_backend.components
-)
+app = App(routes=routes, components=components, event_hooks=event_hooks)
+async_app = ASyncApp(routes=routes, components=components, event_hooks=event_hooks)
 
-async_app = ASyncIOApp(
-    routes=routes,
-    settings=settings,
-    commands=sqlalchemy_backend.commands,
-    components=sqlalchemy_backend.components
-)
+engine = components[0].engine
 
 
 class TestCaseSQLAlchemyCRUD:
-    @pytest.fixture(scope='function')
+    @pytest.fixture(scope='function', params=[app, async_app])
     def client(self, request):
-        app = request.param
-        app.main(['create_tables'])
-        yield TestClient(app)
-        app.main(['drop_tables'])
+        database.Base.metadata.create_all(engine)
+        yield TestClient(request.param)
+        database.Base.metadata.drop_all(engine)
 
     @pytest.fixture
     def puppy(self):
@@ -72,7 +56,6 @@ class TestCaseSQLAlchemyCRUD:
     def another_puppy(self):
         return {'name': 'puppito'}
 
-    @pytest.mark.parametrize('client', [wsgi_app, async_app], indirect=['client'])
     def test_create(self, client, puppy):
         # Successfully create a new record
         response = client.post('/puppy/', json=puppy)
@@ -85,7 +68,6 @@ class TestCaseSQLAlchemyCRUD:
         assert response.status_code == 200
         assert response.json() == [created_puppy]
 
-    @pytest.mark.parametrize('client', [wsgi_app, async_app], indirect=['client'])
     def test_retrieve(self, client, puppy):
         # Successfully create a new record
         response = client.post('/puppy/', json=puppy)
@@ -98,13 +80,11 @@ class TestCaseSQLAlchemyCRUD:
         assert response.status_code == 200
         assert response.json() == created_puppy
 
-    @pytest.mark.parametrize('client', [wsgi_app, async_app], indirect=['client'])
     def test_retrieve_not_found(self, client):
         # retrieve wrong record
         response = client.get('/puppy/foo/')
         assert response.status_code == 404
 
-    @pytest.mark.parametrize('client', [wsgi_app, async_app], indirect=['client'])
     def test_update(self, client, puppy, another_puppy):
         # Successfully create a new record
         response = client.post('/puppy/', json=puppy)
@@ -123,13 +103,11 @@ class TestCaseSQLAlchemyCRUD:
         assert response.status_code == 200
         assert response.json() == [updated_puppy]
 
-    @pytest.mark.parametrize('client', [wsgi_app, async_app], indirect=['client'])
     def test_update_not_found(self, client, puppy):
         # retrieve wrong record
         response = client.put('/puppy/foo/', json=puppy)
         assert response.status_code == 404
 
-    @pytest.mark.parametrize('client', [wsgi_app, async_app], indirect=['client'])
     def test_delete(self, client, puppy):
         # Successfully create a new record
         response = client.post('/puppy/', json=puppy)
@@ -150,7 +128,6 @@ class TestCaseSQLAlchemyCRUD:
         response = client.get('/puppy/{}'.format(created_puppy['id']))
         assert response.status_code == 404
 
-    @pytest.mark.parametrize('client', [wsgi_app, async_app], indirect=['client'])
     def test_list(self, client, puppy, another_puppy):
         # Successfully create a new record
         response = client.post('/puppy/', json=puppy)
@@ -169,36 +146,6 @@ class TestCaseSQLAlchemyCRUD:
         assert response.status_code == 200
         assert response.json() == [created_puppy, created_second_puppy]
 
-    @pytest.mark.parametrize('client', [wsgi_app, async_app], indirect=['client'])
-    def test_replace(self, client, puppy, another_puppy):
-        # Successfully create a new record
-        response = client.post('/puppy/', json=puppy)
-        assert response.status_code == 201
-        created_puppy = response.json()
-        assert created_puppy['name'] == 'canna'
-
-        # Successfully create another new record
-        response = client.post('/puppy/', json=another_puppy)
-        assert response.status_code == 201
-        created_second_puppy = response.json()
-        assert created_second_puppy['name'] == 'puppito'
-
-        # List all the existing records
-        response = client.get('/puppy/')
-        assert response.status_code == 200
-        assert response.json() == [created_puppy, created_second_puppy]
-
-        # Replace collection
-        response = client.put('/puppy/', json=[puppy])
-        assert response.status_code == 200
-        assert response.json() == [created_puppy]
-
-        # List all the existing records
-        response = client.get('/puppy/')
-        assert response.status_code == 200
-        assert response.json() == [created_puppy]
-
-    @pytest.mark.parametrize('client', [wsgi_app, async_app], indirect=['client'])
     def test_drop(self, client, puppy):
         # Successfully create a new record
         response = client.post('/puppy/', json=puppy)
