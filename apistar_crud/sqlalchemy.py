@@ -9,21 +9,21 @@ from apistar_crud.base import BaseResource
 
 class Resource(BaseResource):
     @classmethod
-    def add_create(mcs, namespace: Dict[str, Any], model, type_):
-        def create(session: Session, element: type_) -> http.JSONResponse:
+    def add_create(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+        def create(session: Session, element: input_type) -> http.JSONResponse:
             """
             Create a new element for this resource.
             """
             record = model(**element)
             session.add(record)
             session.flush()
-            return http.JSONResponse(type_(record), status_code=201)
+            return http.JSONResponse(output_type(record), status_code=201)
 
         namespace['create'] = create
 
     @classmethod
-    def add_retrieve(mcs, namespace: Dict[str, Any], model, type_):
-        def retrieve(session: Session, element_id: str) -> type_:
+    def add_retrieve(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+        def retrieve(session: Session, element_id: str) -> output_type:
             """
             Retrieve an element of this resource.
             """
@@ -31,13 +31,13 @@ class Resource(BaseResource):
             if record is None:
                 raise NotFound
 
-            return type_(record)
+            return output_type(record)
 
         namespace['retrieve'] = retrieve
 
     @classmethod
-    def add_update(mcs, namespace: Dict[str, Any], model, type_):
-        def update(session: Session, element_id: str, element: type_) -> http.JSONResponse:
+    def add_update(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+        def update(session: Session, element_id: str, element: input_type) -> http.JSONResponse:
             """
             Update an element of this resource.
             """
@@ -48,12 +48,12 @@ class Resource(BaseResource):
             for k, value in element.items():
                 setattr(record, k, value)
 
-            return http.JSONResponse(type_(record), status_code=200)
+            return http.JSONResponse(output_type(record), status_code=200)
 
         namespace['update'] = update
 
     @classmethod
-    def add_delete(mcs, namespace: Dict[str, Any], model, type_):
+    def add_delete(mcs, namespace: Dict[str, Any], model, input_type, output_type):
         def delete(session: Session, element_id: str):
             """
             Delete an element of this resource.
@@ -64,17 +64,17 @@ class Resource(BaseResource):
         namespace['delete'] = delete
 
     @classmethod
-    def add_list(mcs, namespace: Dict[str, Any], model, type_):
-        def list_(session: Session) -> List[type_]:
+    def add_list(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+        def list_(session: Session) -> List[output_type]:
             """
             List resource collection.
             """
-            return [type_(record) for record in session.query(model).all()]
+            return [output_type(record) for record in session.query(model).all()]
 
         namespace['list'] = list_
 
     @classmethod
-    def add_drop(mcs, namespace: Dict[str, Any], model, type_):
+    def add_drop(mcs, namespace: Dict[str, Any], model, input_type, output_type):
         def drop(session: Session) -> http.JSONResponse:
             """
             Drop resource collection.

@@ -42,7 +42,7 @@ Install API star CRUD:
 
     pip install apistar-crud
 
-Create a *model* for your resource:
+Create a **model** for your resource:
 
 .. code:: python
 
@@ -54,17 +54,18 @@ Create a *model* for your resource:
         id = Column(Integer, primary_key=True)
         name = Column(String)
 
-Create a *type* for your resource:
+Create an **input type** and **output_type** for your resource:
 
 .. code:: python
 
-    class PuppyType(typesystem.Object):
-        properties = {
-            'id': typesystem.Integer,
-            'name': typesystem.String
-        }
+    class PuppyInputType(types.Type):
+        name = validators.String()
 
-Now create your resource:
+    class PuppyOutputType(types.Type):
+        id = validators.Integer()
+        name = validators.String()
+
+Now create your **resource**:
 
 .. code:: python
 
@@ -72,10 +73,11 @@ Now create your resource:
 
     class PuppyResource(metaclass=Resource):
         model = PuppyModel
-        type = PuppyType
+        input_type = PuppyInputType
+        output_type = PuppyOutputType
         methods = ('create', 'retrieve', 'update', 'delete', 'list', 'drop')
 
-The resource generates his own routes, so you can add it to your main *routes.py*:
+The resource generates his own **routes**, so you can add it to your main routes list:
 
 .. code:: python
 

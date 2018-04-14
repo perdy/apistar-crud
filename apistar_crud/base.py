@@ -18,17 +18,14 @@ class BaseResource(type):
     def __new__(mcs, name, bases, namespace):
         try:
             model = namespace['model']
-        except KeyError:
-            raise AttributeError('{} needs to define attribute: "model"'.format(name))
-
-        try:
-            type_ = namespace['type']
-        except KeyError:
-            raise AttributeError('{} needs to define attribute: "type"'.format(name))
+            input_type = namespace['input_type']
+            output_type = namespace['output_type']
+        except KeyError as e:
+            raise AttributeError('{} needs to define attribute: "{}"'.format(name, e))
 
         methods = namespace.get('methods', mcs.DEFAULT_METHODS)
 
-        mcs.add_methods(namespace, methods, model, type_)
+        mcs.add_methods(namespace, methods, model, input_type, output_type)
         mcs.add_routes(namespace, methods)
 
         return type(name, bases, namespace)
@@ -39,36 +36,36 @@ class BaseResource(type):
         namespace['routes'] = routes
 
     @classmethod
-    def add_methods(mcs, namespace: Dict[str, Any], methods: Iterable[str], model, type_):
+    def add_methods(mcs, namespace: Dict[str, Any], methods: Iterable[str], model, input_type, output_type):
         methods = set(methods) - set(namespace.keys())
 
         for method in methods:
             try:
-                getattr(mcs, 'add_{}'.format(method))(namespace, model, type_)
+                getattr(mcs, 'add_{}'.format(method))(namespace, model, input_type, output_type)
             except AttributeError:
                 raise AttributeError('Invalid method "{}", must be one of: {}.'.format(
                     method, ', '.join(mcs.AVAILABLE_METHODS)))
 
     @classmethod
-    def add_create(mcs, namespace: Dict[str, Any], model, type_):
+    def add_create(mcs, namespace: Dict[str, Any], model, input_type, output_type):
         raise NotImplementedError
 
     @classmethod
-    def add_retrieve(mcs, namespace: Dict[str, Any], model, type_):
+    def add_retrieve(mcs, namespace: Dict[str, Any], model, input_type, output_type):
         raise NotImplementedError
 
     @classmethod
-    def add_update(mcs, namespace: Dict[str, Any], model, type_):
+    def add_update(mcs, namespace: Dict[str, Any], model, input_type, output_type):
         raise NotImplementedError
 
     @classmethod
-    def add_delete(mcs, namespace: Dict[str, Any], model, type_):
+    def add_delete(mcs, namespace: Dict[str, Any], model, input_type, output_type):
         raise NotImplementedError
 
     @classmethod
-    def add_list(mcs, namespace: Dict[str, Any], model, type_):
+    def add_list(mcs, namespace: Dict[str, Any], model, input_type, output_type):
         raise NotImplementedError
 
     @classmethod
-    def add_drop(mcs, namespace: Dict[str, Any], model, type_):
+    def add_drop(mcs, namespace: Dict[str, Any], model, input_type, output_type):
         raise NotImplementedError

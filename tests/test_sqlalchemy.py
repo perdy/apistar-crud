@@ -19,14 +19,19 @@ class PuppyModel(database.Base):
     name = Column(String)
 
 
-class PuppyType(types.Type):
+class PuppyInputType(types.Type):
+    name = validators.String()
+
+
+class PuppyOutputType(types.Type):
     id = validators.Integer(allow_null=True, default=None)
     name = validators.String()
 
 
 class PuppyResource(metaclass=Resource):
     model = PuppyModel
-    type = PuppyType
+    input_type = PuppyInputType
+    output_type = PuppyOutputType
     methods = ('create', 'retrieve', 'update', 'delete', 'list', 'drop')
 
 

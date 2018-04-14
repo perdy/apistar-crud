@@ -10,9 +10,13 @@ class PuppyModel:
     name = 'Canna'
 
 
-class PuppyType(types.Type):
-    id = validators.Integer,
-    name = validators.String
+class PuppyInputType(types.Type):
+    name = validators.String()
+
+
+class PuppyOutputType(types.Type):
+    id = validators.Integer()
+    name = validators.String()
 
 
 class TestCaseBaseCRUDResource:
@@ -21,12 +25,14 @@ class TestCaseBaseCRUDResource:
         if hasattr(request, 'param'):
             class PuppyResource(metaclass=Resource):
                 model = PuppyModel
-                type = PuppyType
+                input_type = PuppyInputType
+                output_type = PuppyOutputType
                 methods = request.param
         else:
             class PuppyResource(metaclass=Resource):
                 model = PuppyModel
-                type = PuppyType
+                input_type = PuppyInputType
+                output_type = PuppyOutputType
 
         return PuppyResource
 
@@ -56,16 +62,25 @@ class TestCaseBaseCRUDResource:
     def test_new_no_model(self):
         with pytest.raises(AttributeError):
             class PuppyResource(metaclass=Resource):
-                type = PuppyType
+                input_type = PuppyInputType
+                output_type = PuppyOutputType
 
-    def test_new_no_type(self):
+    def test_new_no_input_type(self):
         with pytest.raises(AttributeError):
             class PuppyResource(metaclass=Resource):
                 model = PuppyModel
+                output_type = PuppyOutputType
+
+    def test_new_no_output_type(self):
+        with pytest.raises(AttributeError):
+            class PuppyResource(metaclass=Resource):
+                model = PuppyModel
+                input_type = PuppyInputType
 
     def test_new_wrong_methods(self):
         with pytest.raises(AttributeError):
             class PuppyResource(metaclass=Resource):
-                type = PuppyType
                 model = PuppyModel
+                input_type = PuppyInputType
+                output_type = PuppyOutputType
                 methods = ('foo',)
