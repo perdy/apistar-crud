@@ -28,8 +28,7 @@ def get_packages(package):
 
 def get_package_data(package):
     """
-    Return all files under the root package, that are not in a
-    package themselves.
+    Return all files under the root package, that are not in a package themselves.
     """
     walk = [(dirpath.replace(package + os.sep, '', 1), filenames)
             for dirpath, dirnames, filenames in os.walk(package)
@@ -42,6 +41,17 @@ def get_package_data(package):
     return {package: filepaths}
 
 
+def get_long_description(long_description_file):
+    """
+    Read long description from file.
+    """
+    with open(long_description_file) as f:
+        long_description = f.read()
+
+    return long_description
+
+
+
 name = 'apistar-crud'
 package_name = 'apistar_crud'
 version = get_version(package_name)
@@ -50,6 +60,7 @@ setup(
     name=name,
     version=version,
     description='API Star tools to create CRUD resources.',
+    long_description=get_long_description('README.rst'),
     author='José Antonio Perdiguero López',
     author_email='perdy.hh@gmail.com',
     maintainer='José Antonio Perdiguero López',

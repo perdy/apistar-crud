@@ -1,5 +1,8 @@
 Changes
 =======
+v0.2.2 - 2018-04-26
+ * Add long description for PyPI project description.
+
 v0.2.1 - 2018-04-18
  * Remove pip dependency from setup.py.
 
