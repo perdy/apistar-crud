@@ -1,6 +1,7 @@
 from typing import Any, Dict, Iterable
 
 from apistar import Route
+from apistar_crud.signature import Annotations
 
 
 class BaseResource(type):
@@ -13,7 +14,7 @@ class BaseResource(type):
         'delete': ('/{element_id}/', 'DELETE'),  # Delete an element of this resource
     }
     AVAILABLE_METHODS = tuple(METHODS.keys())
-    DEFAULT_METHODS = ('create', 'retrieve', 'update', 'delete', 'list')
+    DEFAULT_METHODS = {method: {} for method in ('create', 'retrieve', 'update', 'delete', 'list')}
 
     def __new__(mcs, name, bases, namespace):
         try:
@@ -26,7 +27,7 @@ class BaseResource(type):
         methods = namespace.get('methods', mcs.DEFAULT_METHODS)
 
         mcs.add_methods(namespace, methods, model, input_type, output_type)
-        mcs.add_routes(namespace, methods)
+        mcs.add_routes(namespace, methods.keys())
 
         return type(name, bases, namespace)
 
@@ -36,36 +37,42 @@ class BaseResource(type):
         namespace['routes'] = routes
 
     @classmethod
-    def add_methods(mcs, namespace: Dict[str, Any], methods: Iterable[str], model, input_type, output_type):
-        methods = set(methods) - set(namespace.keys())
-
-        for method in methods:
+    def add_methods(mcs, namespace: Dict[str, Any], methods: Dict[str, Annotations],
+                    model, input_type, output_type):
+        for name, extra_params in methods.items():
             try:
-                getattr(mcs, 'add_{}'.format(method))(namespace, model, input_type, output_type)
+                add_method = getattr(mcs, 'add_{}'.format(name))
+                add_method(namespace, model, input_type, output_type, extra_params)
             except AttributeError:
                 raise AttributeError('Invalid method "{}", must be one of: {}.'.format(
-                    method, ', '.join(mcs.AVAILABLE_METHODS)))
+                    name, ', '.join(mcs.AVAILABLE_METHODS)))
 
     @classmethod
-    def add_create(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_create(mcs, namespace: Dict[str, Any], model,
+                   input_type, output_type, extra_params: Annotations):
         raise NotImplementedError
 
     @classmethod
-    def add_retrieve(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_retrieve(mcs, namespace: Dict[str, Any], model,
+                     input_type, output_type, extra_params: Annotations):
         raise NotImplementedError
 
     @classmethod
-    def add_update(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_update(mcs, namespace: Dict[str, Any], model,
+                   input_type, output_type, extra_params: Annotations):
         raise NotImplementedError
 
     @classmethod
-    def add_delete(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_delete(mcs, namespace: Dict[str, Any], model,
+                   input_type, output_type, extra_params: Annotations):
         raise NotImplementedError
 
     @classmethod
-    def add_list(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_list(mcs, namespace: Dict[str, Any], model,
+                 input_type, output_type, extra_params: Annotations):
         raise NotImplementedError
 
     @classmethod
-    def add_drop(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_drop(mcs, namespace: Dict[str, Any], model,
+                 input_type, output_type, extra_params: Annotations):
         raise NotImplementedError

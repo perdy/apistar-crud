@@ -32,7 +32,7 @@ class PuppyResource(metaclass=Resource):
     model = PuppyModel
     input_type = PuppyInputType
     output_type = PuppyOutputType
-    methods = ('create', 'retrieve', 'update', 'delete', 'list', 'drop')
+    methods = {method: {} for method in ('create', 'retrieve', 'update', 'delete', 'list', 'drop')}
 
 
 routes = [

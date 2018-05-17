@@ -2,9 +2,10 @@ API Star CRUD
 =============
 |build-status| |coverage| |version|
 
-:Version: 0.2.2
+:Version: 0.3.0
 :Status: Production/Stable
-:Author: José Antonio Perdiguero López
+:Author: José Antonio Perdiguero López,
+         Chen Rotem Levy
 
 API Star tools to create CRUD resources.
 
@@ -54,6 +55,46 @@ Create a **model** for your resource:
         id = Column(Integer, primary_key=True)
         name = Column(String)
 
+Assuming you have some an **authentication** module:
+
+.. code:: python
+
+    from apistar import Component, exceptions, http
+
+    def verify(self, authorization: http.Header,
+                             expected_user, expected_password) -> bool:
+        if authorization is None:
+            return False
+
+        scheme, token = authorization.split()
+        if scheme.lower() != 'basic':
+            return False
+
+        username, password = base64.b64decode(token).decode('utf-8').split(':')
+        # Just an example here. You'd normally want to make a database lookup,
+        # and check against a hash of the password.
+        return username == expected_user and password == expected_password
+
+    class User:
+        pass
+
+    class UserComponent(Component):
+        def resolve(self: authorization: http.Header) -> User:
+            if verify(authorization, 'user', 'secret'):
+                return User()
+            else:
+                raise exceptions.Forbidden
+
+    class Admin:
+        pass
+
+    class AdminComponent(Component):
+        def resolve(self: authorization: http.Header) -> User:
+            if verify(authorization, 'admin', 'super secret'):
+                return Admin()
+            else:
+                raise Forbidden
+
 Create an **input type** and **output_type** for your resource:
 
 .. code:: python
@@ -70,12 +111,16 @@ Now create your **resource**:
 .. code:: python
 
     from apistar_crud.sqlalchemy import Resource
+    from authentication import User, Admin
 
     class PuppyResource(metaclass=Resource):
         model = PuppyModel
         input_type = PuppyInputType
         output_type = PuppyOutputType
-        methods = ('create', 'retrieve', 'update', 'delete', 'list', 'drop')
+        # Here ask for no authorization for retrieve and list, only allow User
+        # to create and update, and allow only Admin to drop:
+        methods = {'create': {'auth': User}, 'retrieve': {}, 'update': {'auth': User},
+                   'delete': {'auth': User}, 'list': {}, 'drop': {'auth': Admin}}
 
 The resource generates his own **routes**, so you can add it to your main routes list:
 
