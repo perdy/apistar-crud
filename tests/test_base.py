@@ -27,7 +27,7 @@ class TestCaseBaseCRUDResource:
                 model = PuppyModel
                 input_type = PuppyInputType
                 output_type = PuppyOutputType
-                methods = request.param
+                methods = {method: {} for method in request.param}
         else:
             class PuppyResource(metaclass=Resource):
                 model = PuppyModel
@@ -57,7 +57,8 @@ class TestCaseBaseCRUDResource:
         assert hasattr(resource, 'drop')
         assert len(resource.routes) == 6
         assert [route.handler for route in resource.routes] == \
-               [resource.create, resource.retrieve, resource.update, resource.delete, resource.list, resource.drop]
+               [resource.create, resource.retrieve, resource.update,
+                resource.delete, resource.list, resource.drop]
 
     def test_new_no_model(self):
         with pytest.raises(AttributeError):

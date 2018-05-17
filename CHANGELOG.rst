@@ -1,5 +1,8 @@
 Changes
 =======
+v0.3.0 - 2018-05-17
+ * Ability to inject authorization.
+
 v0.2.2 - 2018-04-26
  * Add long description for PyPI project description.
 

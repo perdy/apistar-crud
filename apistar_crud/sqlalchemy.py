@@ -5,11 +5,13 @@ from apistar.exceptions import NotFound
 from sqlalchemy.orm import Session
 
 from apistar_crud.base import BaseResource
+from apistar_crud.signature import Annotations, inject_params
 
 
 class Resource(BaseResource):
     @classmethod
-    def add_create(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_create(mcs, namespace: Dict[str, Any], model,
+                   input_type, output_type, extra_params: Annotations):
         def create(session: Session, element: input_type) -> http.JSONResponse:
             """
             Create a new element for this resource.
@@ -19,10 +21,12 @@ class Resource(BaseResource):
             session.flush()
             return http.JSONResponse(output_type(record), status_code=201)
 
+        inject_params(create, extra_params)
         namespace['create'] = create
 
     @classmethod
-    def add_retrieve(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_retrieve(mcs, namespace: Dict[str, Any], model,
+                     input_type, output_type, extra_params: Annotations):
         def retrieve(session: Session, element_id: str) -> output_type:
             """
             Retrieve an element of this resource.
@@ -33,10 +37,12 @@ class Resource(BaseResource):
 
             return output_type(record)
 
+        inject_params(retrieve, extra_params)
         namespace['retrieve'] = retrieve
 
     @classmethod
-    def add_update(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_update(mcs, namespace: Dict[str, Any], model,
+                   input_type, output_type, extra_params: Annotations):
         def update(session: Session, element_id: str, element: input_type) -> http.JSONResponse:
             """
             Update an element of this resource.
@@ -50,10 +56,12 @@ class Resource(BaseResource):
 
             return http.JSONResponse(output_type(record), status_code=200)
 
+        inject_params(update, extra_params)
         namespace['update'] = update
 
     @classmethod
-    def add_delete(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_delete(mcs, namespace: Dict[str, Any], model,
+                   input_type, output_type, extra_params: Annotations):
         def delete(session: Session, element_id: str):
             """
             Delete an element of this resource.
@@ -61,10 +69,12 @@ class Resource(BaseResource):
             session.query(model).filter_by(id=element_id).delete()
             return http.JSONResponse(None, status_code=204)
 
+        inject_params(delete, extra_params)
         namespace['delete'] = delete
 
     @classmethod
-    def add_list(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_list(mcs, namespace: Dict[str, Any], model,
+                 input_type, output_type, extra_params: Annotations):
         def list_(session: Session) -> List[output_type]:
             """
             List resource collection.
@@ -74,7 +84,8 @@ class Resource(BaseResource):
         namespace['list'] = list_
 
     @classmethod
-    def add_drop(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_drop(mcs, namespace: Dict[str, Any], model,
+                 input_type, output_type, extra_params: Annotations):
         def drop(session: Session) -> http.JSONResponse:
             """
             Drop resource collection.
