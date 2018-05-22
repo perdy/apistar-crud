@@ -1,14 +1,11 @@
 -   repo: git@github.com:pre-commit/pre-commit-hooks
-    sha: 18d7035de5388cc7775be57f529c154bf541aab9
+    rev: master
     hooks:
     -   id: check-added-large-files
     -   id: check-merge-conflict
     -   id: check-xml
     -   id: check-yaml
     -   id: debug-statements
-    -   id: double-quote-string-fixer
-    -   id: end-of-file-fixer
-    -   id: fix-encoding-pragma
     -   id: name-tests-test
         args:
         - --django
@@ -16,11 +13,25 @@
         args:
         - --autofix
         - --indent=2
-    -   id: requirements-txt-fixer
-    -   id: trailing-whitespace
--   repo: git://github.com/guykisel/prospector-mirror
-    sha: 00fbd80101566b1b9c873c71f2ab7b95b8bd0a7d
+    -   id: flake8
+-   repo: local
     hooks:
-    -   id: prospector
+    -   id: black
+        name: Black - Code Style
+        entry: pipenv run black
         args:
-        - --path=.
+        - -q
+        - --safe
+        - --line-length=120
+        language: system
+        types: [python]
+    -   id: isort
+        name: Isort - Sort Imports
+        entry: pipenv run isort
+        language: system
+        types: [python]
+    -   id: pipenv-check
+        name: Pipenv Check - Security Check
+        entry: pipenv check
+        language: system
+        types: [python]

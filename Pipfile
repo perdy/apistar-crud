@@ -1,31 +1,27 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 apistar = "*"
-
 
 [dev-packages]
-
-apistar = "*"
 apistar-sqlalchemy = "*"
 aiohttp = "*"
 clinner = "*"
 coverage = "*"
 Django = "*"
-prospector = "*"
+flake8 = "*"
 pytest = "*"
 pytest-xdist = "*"
 pytest-cov = "*"
 SQLAlchemy = "*"
 tox = "*"
-
+aiofiles = "*"
+ipython = "*"
+isort = "*"
+black = "==18.5b0"
 
 [requires]
-
 python_version = "3.6"

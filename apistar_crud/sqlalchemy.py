@@ -8,8 +8,10 @@ from apistar_crud.base import BaseResource
 
 
 class Resource(BaseResource):
+
     @classmethod
     def add_create(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+
         def create(session: Session, element: input_type) -> http.JSONResponse:
             """
             Create a new element for this resource.
@@ -19,10 +21,11 @@ class Resource(BaseResource):
             session.flush()
             return http.JSONResponse(output_type(record), status_code=201)
 
-        namespace['create'] = create
+        namespace["create"] = create
 
     @classmethod
     def add_retrieve(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+
         def retrieve(session: Session, element_id: str) -> output_type:
             """
             Retrieve an element of this resource.
@@ -33,10 +36,11 @@ class Resource(BaseResource):
 
             return output_type(record)
 
-        namespace['retrieve'] = retrieve
+        namespace["retrieve"] = retrieve
 
     @classmethod
     def add_update(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+
         def update(session: Session, element_id: str, element: input_type) -> http.JSONResponse:
             """
             Update an element of this resource.
@@ -50,10 +54,11 @@ class Resource(BaseResource):
 
             return http.JSONResponse(output_type(record), status_code=200)
 
-        namespace['update'] = update
+        namespace["update"] = update
 
     @classmethod
     def add_delete(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+
         def delete(session: Session, element_id: str):
             """
             Delete an element of this resource.
@@ -61,26 +66,28 @@ class Resource(BaseResource):
             session.query(model).filter_by(id=element_id).delete()
             return http.JSONResponse(None, status_code=204)
 
-        namespace['delete'] = delete
+        namespace["delete"] = delete
 
     @classmethod
     def add_list(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+
         def list_(session: Session) -> List[output_type]:
             """
             List resource collection.
             """
             return [output_type(record) for record in session.query(model).all()]
 
-        namespace['list'] = list_
+        namespace["list"] = list_
 
     @classmethod
     def add_drop(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+
         def drop(session: Session) -> http.JSONResponse:
             """
             Drop resource collection.
             """
             num_records = session.query(model).count()
             session.query(model).delete()
-            return http.JSONResponse({'deleted': num_records}, status_code=204)
+            return http.JSONResponse({"deleted": num_records}, status_code=204)
 
-        namespace['drop'] = drop
+        namespace["drop"] = drop

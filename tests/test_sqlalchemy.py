@@ -1,16 +1,11 @@
-import os
-
 import pytest
-from apistar import ASyncApp, App, Include, TestClient, types, validators
+from apistar import App, ASyncApp, Include, TestClient, types, validators
+from apistar_sqlalchemy import database
+from apistar_sqlalchemy.components import SQLAlchemySessionComponent
+from apistar_sqlalchemy.event_hooks import SQLAlchemyTransactionHook
 from sqlalchemy import Column, Integer, String
 
 from apistar_crud.sqlalchemy import Resource
-
-os.environ['SQLALCHEMY_URL'] = 'sqlite://'
-
-from apistar_sqlalchemy import database
-from apistar_sqlalchemy.components import components
-from apistar_sqlalchemy.event_hooks import event_hooks
 
 
 class PuppyModel(database.Base):
@@ -32,143 +27,143 @@ class PuppyResource(metaclass=Resource):
     model = PuppyModel
     input_type = PuppyInputType
     output_type = PuppyOutputType
-    methods = ('create', 'retrieve', 'update', 'delete', 'list', 'drop')
+    methods = ("create", "retrieve", "update", "delete", "list", "drop")
 
 
-routes = [
-    Include('/puppy', 'puppy', PuppyResource.routes),
-]
+routes = [Include("/puppy", "puppy", PuppyResource.routes)]
 
+sqlalchemy_component = SQLAlchemySessionComponent(url="sqlite://")
+components = [sqlalchemy_component]
+event_hooks = [SQLAlchemyTransactionHook()]
 
 app = App(routes=routes, components=components, event_hooks=event_hooks)
 async_app = ASyncApp(routes=routes, components=components, event_hooks=event_hooks)
 
-engine = components[0].engine
-
 
 class TestCaseSQLAlchemyCRUD:
-    @pytest.fixture(scope='function', params=[app, async_app])
+
+    @pytest.fixture(scope="function", params=[app, async_app])
     def client(self, request):
-        database.Base.metadata.create_all(engine)
+        database.Base.metadata.create_all(sqlalchemy_component.engine)
         yield TestClient(request.param)
-        database.Base.metadata.drop_all(engine)
+        database.Base.metadata.drop_all(sqlalchemy_component.engine)
 
     @pytest.fixture
     def puppy(self):
-        return {'name': 'canna'}
+        return {"name": "canna"}
 
     @pytest.fixture
     def another_puppy(self):
-        return {'name': 'puppito'}
+        return {"name": "puppito"}
 
     def test_create(self, client, puppy):
         # Successfully create a new record
-        response = client.post('/puppy/', json=puppy)
+        response = client.post("/puppy/", json=puppy)
         assert response.status_code == 201
         created_puppy = response.json()
-        assert created_puppy['name'] == 'canna'
+        assert created_puppy["name"] == "canna"
 
         # List all the existing records
-        response = client.get('/puppy/')
+        response = client.get("/puppy/")
         assert response.status_code == 200
         assert response.json() == [created_puppy]
 
     def test_retrieve(self, client, puppy):
         # Successfully create a new record
-        response = client.post('/puppy/', json=puppy)
+        response = client.post("/puppy/", json=puppy)
         assert response.status_code == 201
         created_puppy = response.json()
-        assert created_puppy['name'] == 'canna'
+        assert created_puppy["name"] == "canna"
 
         # Retrieve same record
-        response = client.get('/puppy/{}'.format(created_puppy['id']))
+        response = client.get("/puppy/{}".format(created_puppy["id"]))
         assert response.status_code == 200
         assert response.json() == created_puppy
 
     def test_retrieve_not_found(self, client):
         # retrieve wrong record
-        response = client.get('/puppy/foo/')
+        response = client.get("/puppy/foo/")
         assert response.status_code == 404
 
     def test_update(self, client, puppy, another_puppy):
         # Successfully create a new record
-        response = client.post('/puppy/', json=puppy)
+        response = client.post("/puppy/", json=puppy)
         assert response.status_code == 201
         created_puppy = response.json()
-        assert created_puppy['name'] == 'canna'
+        assert created_puppy["name"] == "canna"
 
         # Update record
-        response = client.put('/puppy/{}/'.format(created_puppy['id']), json=another_puppy)
+        response = client.put("/puppy/{}/".format(created_puppy["id"]), json=another_puppy)
         assert response.status_code == 200
         updated_puppy = response.json()
-        assert updated_puppy['name'] == 'puppito'
+        assert updated_puppy["name"] == "puppito"
 
         # List all the existing records
-        response = client.get('/puppy/')
+        response = client.get("/puppy/")
         assert response.status_code == 200
         assert response.json() == [updated_puppy]
 
     def test_update_not_found(self, client, puppy):
         # retrieve wrong record
-        response = client.put('/puppy/foo/', json=puppy)
+        response = client.put("/puppy/foo/", json=puppy)
         assert response.status_code == 404
 
     def test_delete(self, client, puppy):
         # Successfully create a new record
-        response = client.post('/puppy/', json=puppy)
+        response = client.post("/puppy/", json=puppy)
         assert response.status_code == 201
         created_puppy = response.json()
-        assert created_puppy['name'] == 'canna'
+        assert created_puppy["name"] == "canna"
 
         # Retrieve same record
-        response = client.get('/puppy/{}/'.format(created_puppy['id']))
+        response = client.get("/puppy/{}/".format(created_puppy["id"]))
         assert response.status_code == 200
         assert response.json() == created_puppy
 
         # Delete record
-        response = client.delete('/puppy/{}/'.format(created_puppy['id']))
+        response = client.delete("/puppy/{}/".format(created_puppy["id"]))
         assert response.status_code == 204
 
         # Retrieve deleted record
-        response = client.get('/puppy/{}'.format(created_puppy['id']))
+        response = client.get("/puppy/{}".format(created_puppy["id"]))
         assert response.status_code == 404
 
     def test_list(self, client, puppy, another_puppy):
         # Successfully create a new record
-        response = client.post('/puppy/', json=puppy)
+        response = client.post("/puppy/", json=puppy)
         assert response.status_code == 201
         created_puppy = response.json()
-        assert created_puppy['name'] == 'canna'
+        assert created_puppy["name"] == "canna"
 
         # Successfully create another new record
-        response = client.post('/puppy/', json=another_puppy)
+        response = client.post("/puppy/", json=another_puppy)
         assert response.status_code == 201
         created_second_puppy = response.json()
-        assert created_second_puppy['name'] == 'puppito'
+        assert created_second_puppy["name"] == "puppito"
 
         # List all the existing records
-        response = client.get('/puppy/')
+        response = client.get("/puppy/")
         assert response.status_code == 200
         assert response.json() == [created_puppy, created_second_puppy]
 
     def test_drop(self, client, puppy):
         # Successfully create a new record
-        response = client.post('/puppy/', json=puppy)
+        response = client.post("/puppy/", json=puppy)
         assert response.status_code == 201
         created_puppy = response.json()
-        assert created_puppy['name'] == 'canna'
+        assert created_puppy["name"] == "canna"
 
         # List all the existing records
-        response = client.get('/puppy/')
+        response = client.get("/puppy/")
         assert response.status_code == 200
         assert response.json() == [created_puppy]
 
         # Drop collection
-        response = client.delete('/puppy/', json=[puppy])
+        response = client.delete("/puppy/", json=[puppy])
         assert response.status_code == 204
-        assert response.json() == {'deleted': 1}
+        assert response.json() == {"deleted": 1}
 
         # List all the existing records
-        response = client.get('/puppy/')
+        response = client.get("/puppy/")
         assert response.status_code == 200
         assert response.json() == []
