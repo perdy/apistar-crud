@@ -8,20 +8,17 @@ apistar = "*"
 
 [dev-packages]
 apistar-sqlalchemy = "*"
+aiofiles = "*"
 aiohttp = "*"
 clinner = "*"
 coverage = "*"
 Django = "*"
-flake8 = "*"
 pytest = "*"
 pytest-xdist = "*"
 pytest-cov = "*"
 SQLAlchemy = "*"
 tox = "*"
-aiofiles = "*"
 ipython = "*"
-isort = "*"
-black = "==18.5b0"
 
 [requires]
 python_version = "3.6"

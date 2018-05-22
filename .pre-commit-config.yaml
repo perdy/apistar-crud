@@ -18,7 +18,7 @@
     hooks:
     -   id: black
         name: Black - Code Style
-        entry: pipenv run black
+        entry: black
         args:
         - -q
         - --safe
@@ -27,11 +27,6 @@
         types: [python]
     -   id: isort
         name: Isort - Sort Imports
-        entry: pipenv run isort
-        language: system
-        types: [python]
-    -   id: pipenv-check
-        name: Pipenv Check - Security Check
-        entry: pipenv check
+        entry: isort
         language: system
         types: [python]
