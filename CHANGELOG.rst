@@ -1,5 +1,9 @@
 Changes
 =======
+v0.2.4 - 2018-06-07
+ * Use poetry instead of pipenv.
+ * Modify output types to fix schema generation.
+
 v0.2.3 - 2018-05-22
  * Resource routes is a property instead of a static list.
 

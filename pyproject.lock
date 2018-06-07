@@ -1,0 +1,590 @@
+[[package]]
+name = "aiofiles"
+version = "0.3.2"
+description = "File support for asyncio."
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "apipkg"
+version = "1.4"
+description = "apipkg: namespace control and lazy-import mechanism"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "unix,linux,osx,cygwin,win32"
+
+[[package]]
+name = "apistar"
+version = "0.5.30"
+description = "Blazingly fast & beautifully expressive Web APIs"
+category = "main"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[package.dependencies]
+click = "*"
+jinja2 = "*"
+requests = "*"
+pyyaml = "*"
+werkzeug = "*"
+whitenoise = "*"
+[[package]]
+name = "apistar-sqlalchemy"
+version = "0.3.1"
+description = "SQLAlchemy integration for API Star."
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[package.dependencies]
+apistar = "*"
+[[package]]
+name = "appnope"
+version = "0.1.0"
+description = "Disable App Nap on OS X 10.9"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "UNKNOWN"
+
+[package.requirements]
+platform = "darwin"
+[[package]]
+name = "atomicwrites"
+version = "1.1.5"
+description = "Atomic file writes."
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "UNKNOWN"
+
+[[package]]
+name = "attrs"
+version = "18.1.0"
+description = "Classes Without Boilerplate"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "backcall"
+version = "0.1.0"
+description = "Specifications for callback functions passed in to an API"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "UNKNOWN"
+
+[[package]]
+name = "certifi"
+version = "2018.4.16"
+description = "Python package for providing Mozilla's CA Bundle."
+category = "main"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "chardet"
+version = "3.0.4"
+description = "Universal encoding detector for Python 2 and 3"
+category = "main"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "click"
+version = "6.7"
+description = "A simple wrapper around optparse for powerful command line utilities."
+category = "main"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "clinner"
+version = "1.9.4"
+description = "Command Line Interface builder that helps creating an entry point for your application."
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[package.dependencies]
+colorlog = "*"
+colorama = "*"
+[[package]]
+name = "colorama"
+version = "0.3.9"
+description = "Cross-platform colored terminal text."
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "UNKNOWN"
+
+[[package]]
+name = "colorlog"
+version = "3.1.4"
+description = "Log formatting with colors!"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[package.dependencies]
+colorama = "*"
+[[package]]
+name = "coverage"
+version = "4.5.1"
+description = "Code coverage measurement for Python"
+category = "dev"
+optional = false
+python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, <4"
+platform = "*"
+
+[[package]]
+name = "decorator"
+version = "4.3.0"
+description = "Better living through Python with decorators"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "All"
+
+[[package]]
+name = "execnet"
+version = "1.5.0"
+description = "execnet: rapid multi-Python deployment"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "unix"
+
+[package.dependencies]
+apipkg = ">=1.4"
+[[package]]
+name = "idna"
+version = "2.6"
+description = "Internationalized Domain Names in Applications (IDNA)"
+category = "main"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "ipython"
+version = "6.4.0"
+description = "IPython: Productive Interactive Computing"
+category = "dev"
+optional = false
+python-versions = ">=3.3"
+platform = "Linux"
+
+[package.dependencies]
+win-unicode-console = ">=0.5"
+colorama = "*"
+appnope = "*"
+pexpect = "*"
+backcall = "*"
+pygments = "*"
+prompt-toolkit = ">=1.0.15,<2.0.0"
+traitlets = ">=4.2"
+simplegeneric = ">0.8"
+pickleshare = "*"
+decorator = "*"
+jedi = ">=0.10"
+setuptools = ">=18.5"
+[[package]]
+name = "ipython-genutils"
+version = "0.2.0"
+description = "Vestigial utilities from IPython"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "Linux"
+
+[[package]]
+name = "jedi"
+version = "0.12.0"
+description = "An autocompletion tool for Python that can be used for text editors."
+category = "dev"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*"
+platform = "any"
+
+[package.dependencies]
+parso = ">=0.2.0"
+[[package]]
+name = "jinja2"
+version = "2.10"
+description = "A small but fast and easy to use stand-alone template engine written in pure python."
+category = "main"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[package.dependencies]
+MarkupSafe = ">=0.23"
+[[package]]
+name = "markupsafe"
+version = "1.0"
+description = "Implements a XML/HTML/XHTML Markup safe string for Python"
+category = "main"
+optional = false
+python-versions = "*"
+platform = "UNKNOWN"
+
+[[package]]
+name = "more-itertools"
+version = "4.2.0"
+description = "More routines for operating on iterables, beyond itertools"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[package.dependencies]
+six = ">=1.0.0,<2.0.0"
+[[package]]
+name = "parso"
+version = "0.2.1"
+description = "A Python Parser"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "any"
+
+[[package]]
+name = "pexpect"
+version = "4.6.0"
+description = "Pexpect allows easy control of interactive console applications."
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "UNIX"
+
+[package.dependencies]
+ptyprocess = ">=0.5"
+[package.requirements]
+platform = "!=win32"
+[[package]]
+name = "pickleshare"
+version = "0.7.4"
+description = "Tiny 'shelve'-like database with concurrency support"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "pluggy"
+version = "0.6.0"
+description = "plugin and hook calling mechanisms for python"
+category = "dev"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+platform = "unix"
+
+[[package]]
+name = "prompt-toolkit"
+version = "1.0.15"
+description = "Library for building powerful interactive command lines in Python"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[package.dependencies]
+six = ">=1.9.0"
+wcwidth = "*"
+[[package]]
+name = "ptyprocess"
+version = "0.5.2"
+description = "Run a subprocess in a pseudo terminal"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "py"
+version = "1.5.3"
+description = "library with cross-python path, ini-parsing, io, code, log facilities"
+category = "dev"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+platform = "unix"
+
+[[package]]
+name = "pygments"
+version = "2.2.0"
+description = "Pygments is a syntax highlighting package written in Python."
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "any"
+
+[[package]]
+name = "pytest"
+version = "3.6.1"
+description = "pytest: simple powerful testing with Python"
+category = "dev"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+platform = "unix"
+
+[package.dependencies]
+colorama = "*"
+pluggy = ">=0.5,<0.7"
+atomicwrites = ">=1.0"
+more-itertools = ">=4.0.0"
+attrs = ">=17.4.0"
+setuptools = "*"
+six = ">=1.10.0"
+py = ">=1.5.0"
+[[package]]
+name = "pytest-cov"
+version = "2.5.1"
+description = "Pytest plugin for measuring coverage."
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[package.dependencies]
+coverage = ">=3.7.1"
+pytest = ">=2.6.0"
+[[package]]
+name = "pytest-forked"
+version = "0.2"
+description = "run tests in isolated forked subprocesses"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "linux"
+
+[package.dependencies]
+pytest = ">=2.6.0"
+[[package]]
+name = "pytest-xdist"
+version = "1.22.2"
+description = "py.test xdist plugin for distributed testing and loop-on-failing modes"
+category = "dev"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+platform = "linux"
+
+[package.dependencies]
+execnet = ">=1.1"
+pytest = ">=3.0.0"
+pytest-forked = "*"
+[[package]]
+name = "pyyaml"
+version = "3.12"
+description = "YAML parser and emitter for Python"
+category = "main"
+optional = false
+python-versions = "*"
+platform = "Any"
+
+[[package]]
+name = "requests"
+version = "2.18.4"
+description = "Python HTTP for Humans."
+category = "main"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[package.dependencies]
+certifi = ">=2017.4.17"
+chardet = ">=3.0.2,<3.1.0"
+idna = ">=2.5,<2.7"
+urllib3 = ">=1.21.1,<1.23"
+[[package]]
+name = "setuptools"
+version = "39.2.0"
+description = "Easily download, build, install, upgrade, and uninstall Python packages"
+category = "dev"
+optional = false
+python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*"
+platform = "*"
+
+[[package]]
+name = "simplegeneric"
+version = "0.8.1"
+description = "Simple generic functions (similar to Python's own len(), pickle.dump(), etc.)"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "UNKNOWN"
+
+[[package]]
+name = "six"
+version = "1.11.0"
+description = "Python 2 and 3 compatibility utilities"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "sqlalchemy"
+version = "1.2.8"
+description = "Database Abstraction Library"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "tox"
+version = "3.0.0"
+description = "virtualenv-based automation of test activities"
+category = "dev"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+platform = "unix"
+
+[package.dependencies]
+virtualenv = ">=1.11.2"
+six = "*"
+pluggy = ">=0.3.0,<1.0"
+py = ">=1.4.17"
+[[package]]
+name = "traitlets"
+version = "4.3.2"
+description = "Traitlets Python config system"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "Linux,Mac OS X,Windows"
+
+[package.dependencies]
+decorator = "*"
+ipython-genutils = "*"
+six = "*"
+[[package]]
+name = "urllib3"
+version = "1.22"
+description = "HTTP library with thread-safe connection pooling, file post, and more."
+category = "main"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "virtualenv"
+version = "16.0.0"
+description = "Virtual Python Environment builder"
+category = "dev"
+optional = false
+python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*"
+platform = "*"
+
+[[package]]
+name = "wcwidth"
+version = "0.1.7"
+description = "Measures number of Terminal column cells of wide-character codes"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "UNKNOWN"
+
+[[package]]
+name = "werkzeug"
+version = "0.14.1"
+description = "The comprehensive WSGI web application library."
+category = "main"
+optional = false
+python-versions = "*"
+platform = "any"
+
+[[package]]
+name = "whitenoise"
+version = "3.3.1"
+description = "Radically simplified static file serving for WSGI applications"
+category = "main"
+optional = false
+python-versions = "*"
+platform = "*"
+
+[[package]]
+name = "win-unicode-console"
+version = "0.5"
+description = "Enable Unicode input and display when running Python from Windows console."
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "UNKNOWN"
+
+[package.requirements]
+python = "<3.6"
+platform = "win32"
+
+[metadata]
+python-versions = "^3.5"
+platform = "*"
+content-hash = "475a35be482b16df2a43cebcbf76401744e970cafd1320c4c57171b2eec1679c"
+
+[extras]
+sqlalchemy = []
+
+[metadata.hashes]
+aiofiles = [ "25c66ea3872d05d53292a6b3f7fa0f86691512076446d83a505d227b5e76f668", "852a493a877b73e11823bfd4e8e5ef2610d70d12c9eaed961bcd9124d8de8c10",]
+apipkg = [ "65d2aa68b28e7d31233bb2ba8eb31cda40e4671f8ac2d6b241e358c9652a74b9", "2e38399dbe842891fe85392601aab8f40a8f4cc5a9053c326de35a1cc0297ac6",]
+apistar = [ "754858d613e7b386de7a7d33d81c95b61fb89748f3161fe4a71dabe3a320ecab",]
+apistar-sqlalchemy = [ "d220a76363526aa89766ee2de196d95d84946db71ccf23e87186934800107f18", "df2af9e58a9a2960e0f90506466fd04c60cedff13bf68c625002399302488288",]
+appnope = [ "5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0", "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71",]
+atomicwrites = [ "a24da68318b08ac9c9c45029f4a10371ab5b20e4226738e150e6e7c571630ae6", "240831ea22da9ab882b551b31d4225591e5e447a68c5e188db5b89ca1d487585",]
+attrs = [ "4b90b09eeeb9b88c35bc642cbac057e45a5fd85367b985bd2809c62b7b939265", "e0d0eb91441a3b53dab4d9b743eafc1ac44476296a2053b6ca3af0b139faf87b",]
+backcall = [ "38ecd85be2c1e78f77fd91700c76e14667dc21e2713b63876c0eb901196e01e4", "bbbf4b1e5cd2bdb08f915895b51081c041bac22394fdfcfdfbe9f14b77c08bf2",]
+certifi = [ "9fa520c1bacfb634fa7af20a76bcbd3d5fb390481724c597da32c719a7dca4b0", "13e698f54293db9f89122b0581843a782ad0934a4fe0172d2a980ba77fc61bb7",]
+chardet = [ "fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691", "84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae",]
+click = [ "29f99fc6125fbc931b758dc053b3114e55c77a6e4c6c3a2674a2dc986016381d", "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b",]
+clinner = [ "0d5e7e212bc589935796e8c98f7f306bcae7f75df1d55436903186aa06c0e7b5", "fdb77e1584f22097a476885fc75a822d214bc5abe8cd5ce4e1cd46d89cf2b377",]
+colorama = [ "463f8483208e921368c9f306094eb6f725c6ca42b0f97e313cb5d5512459feda", "48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1",]
+colorlog = [ "8b234ebae1ba1237bc79c0d5f1f47b31a3f3e90c0b4c2b0ebdde63a174d3b97b", "418db638c9577f37f0fae4914074f395847a728158a011be2a193ac491b9779d",]
+coverage = [ "7608a3dd5d73cb06c531b8925e0ef8d3de31fed2544a7de6c63960a1e73ea4bc", "3a2184c6d797a125dca8367878d3b9a178b6fdd05fdc2d35d758c3006a1cd694", "f3f501f345f24383c0000395b26b726e46758b71393267aeae0bd36f8b3ade80", "0b136648de27201056c1869a6c0d4e23f464750fd9a9ba9750b8336a244429ed", "337ded681dd2ef9ca04ef5d93cfc87e52e09db2594c296b4a0a3662cb1b41249", "3eb42bf89a6be7deb64116dd1cc4b08171734d721e7a7e57ad64cc4ef29ed2f1", "be6cfcd8053d13f5f5eeb284aa8a814220c3da1b0078fa859011c7fffd86dab9", "69bf008a06b76619d3c3f3b1983f5145c75a305a0fea513aca094cae5c40a8f5", "2eb564bbf7816a9d68dd3369a510be3327f1c618d2357fa6b1216994c2e3d508", "9d6dd10d49e01571bf6e147d3b505141ffc093a06756c60b053a859cb2128b1f", "701cd6093d63e6b8ad7009d8a92425428bc4d6e7ab8d75efbb665c806c1d79ba", "5a13ea7911ff5e1796b6d5e4fbbf6952381a611209b736d48e675c2756f3f74e", "c1bb572fab8208c400adaf06a8133ac0712179a334c09224fb11393e920abcdd", "03481e81d558d30d230bc12999e3edffe392d244349a90f4ef9b88425fac74ba", "28b2191e7283f4f3568962e373b47ef7f0392993bb6660d079c62bd50fe9d162", "de4418dadaa1c01d497e539210cb6baa015965526ff5afc078c57ca69160108d", "8c3cb8c35ec4d9506979b4cf90ee9918bc2e49f84189d9bf5c36c0c1119c6558", "7e1fe19bd6dce69d9fd159d8e4a80a8f52101380d5d3a4d374b6d3eae0e5de9c", "6bc583dc18d5979dc0f6cec26a8603129de0304d5ae1f17e57a12834e7235062", "198626739a79b09fa0a2f06e083ffd12eb55449b5f8bfdbeed1df4910b2ca640", "7aa36d2b844a3e4a4b356708d79fd2c260281a7390d678a10b91ca595ddc9e99", "3d72c20bd105022d29b14a7d628462ebdc61de2f303322c0212a054352f3b287", "4635a184d0bbe537aa185a34193898eee409332a8ccb27eea36f262566585000", "e05cb4d9aad6233d67e0541caa7e511fa4047ed7750ec2510d466e806e0255d6", "76ecd006d1d8f739430ec50cc872889af1f9c1b6b8f48e29941814b09b0fd3cc", "7d3f553904b0c5c016d1dad058a7554c7ac4c91a789fca496e7d8347ad040653", "3c79a6f7b95751cdebcd9037e4d06f8d5a9b60e4ed0cd231342aa8ad7124882a", "56e448f051a201c5ebbaa86a5efd0ca90d327204d8b059ab25ad0f35fbfd79f1", "ac4fef68da01116a5c117eba4dd46f2e06847a497de5ed1d64bb99a5fda1ef91", "1c383d2ef13ade2acc636556fd544dba6e14fa30755f26812f54300e401f98f2", "b8815995e050764c8610dbc82641807d196927c3dbed207f0a079833ffcf588d", "104ab3934abaf5be871a583541e8829d6c19ce7bde2923b2751e0d3ca44db60a", "9e112fcbe0148a6fa4f0a02e8d58e94470fc6cb82a5481618fea901699bf34c4", "15b111b6a0f46ee1a485414a52a7ad1d703bdf984e9ed3c288a4414d3871dcbd", "e4d96c07229f58cb686120f168276e434660e4358cc9cf3b0464210b04913e77", "f8a923a85cb099422ad5a2e345fe877bbc89a8a8b23235824a93488150e45f6e",]
+decorator = [ "2c51dff8ef3c447388fe5e4453d24a2bf128d3a4c32af3fabef1f01c6851ab82", "c39efa13fbdeb4506c476c9b3babf6a718da943dab7811c206005a4a956c080c",]
+execnet = [ "fc155a6b553c66c838d1a22dba1dc9f5f505c43285a878c6f74a79c024750b83", "a7a84d5fa07a089186a329528f127c9d73b9de57f1a1131b82bb5320ee651f6a",]
+idna = [ "8c7309c718f94b3a625cb648ace320157ad16ff131ae0af362c9f21b80ef6ec4", "2c6a5de3089009e3da7c5dde64a141dbc8551d5b7f6cf4ed7c2568d0cc520a8f",]
+ipython = [ "a0c96853549b246991046f32d19db7140f5b1a644cc31f0dc1edc86713b7676f", "eca537aa61592aca2fef4adea12af8e42f5c335004dfa80c78caf80e8b525e5c",]
+ipython-genutils = [ "72dd37233799e619666c9f639a9da83c34013a73e8bbc79a7a6348d93c61fab8", "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8",]
+jedi = [ "5861f6dc0c16e024cbb0044999f9cf8013b292c05f287df06d3d991a87a4eb89", "1972f694c6bc66a2fac8718299e2ab73011d653a6d8059790c3476d2353b99ad",]
+jinja2 = [ "74c935a1b8bb9a3947c50a54766a969d4846290e1e788ea44c1392163723c3bd", "f84be1bb0040caca4cea721fcbbbbd61f9be9464ca236387158b0feea01914a4",]
+markupsafe = [ "a6be69091dac236ea9c6bc7d012beab42010fa914c459791d627dad4910eb665",]
+more-itertools = [ "a18d870ef2ffca2b8463c0070ad17b5978056f403fb64e3f15fe62a52db21cc0", "6703844a52d3588f951883005efcf555e49566a48afd4db4e965d69b883980d3", "2b6b9893337bfd9166bee6a62c2b0c9fe7735dcf85948b387ec8cba30e85d8e8",]
+parso = [ "cdef26e8adc10d589f3ec4eb444bd0a29f3f1eb6d72a4292ab8afcb9d68976a6", "f0604a40b96e062b0fd99cf134cc2d5cdf66939d0902f8267d938b0d5b26707f",]
+pexpect = [ "3fbd41d4caf27fa4a377bfd16fef87271099463e6fa73e92a52f92dfee5d425b", "2a8e88259839571d1251d278476f3eec5db26deb73a70be5ed5dc5435e418aba",]
+pickleshare = [ "c9a2541f25aeabc070f12f452e1f2a8eae2abd51e1cd19e8430402bdf4c1d8b5", "84a9257227dfdd6fe1b4be1319096c20eb85ff1e82c7932f36efccfe1b09737b",]
+pluggy = [ "d345c8fe681115900d6da8d048ba67c25df42973bda370783cd58826442dcd7c", "e160a7fcf25762bb60efc7e171d4497ff1d8d2d75a3d0df7a21b76821ecbf5c5", "7f8ae7f5bdf75671a718d2daf0a64b7885f74510bcd98b1a0bb420eb9a9d0cff",]
+prompt-toolkit = [ "3f473ae040ddaa52b52f97f6b4a493cfa9f5920c255a12dc56a7d34397a398a4", "1df952620eccb399c53ebb359cc7d9a8d3a9538cb34c5a1344bdbeb29fbcc381", "858588f1983ca497f1cf4ffde01d978a3ea02b01c8a26a8bbc5cd2e66d816917",]
+ptyprocess = [ "e8c43b5eee76b2083a9badde89fd1bbce6c8942d1045146e100b7b5e014f4f1a", "e64193f0047ad603b71f202332ab5527c5e52aa7c8b609704fc28c0dc20c4365",]
+py = [ "983f77f3331356039fdd792e9220b7b8ee1aa6bd2b25f567a963ff1de5a64f6a", "29c9fab495d7528e80ba1e343b958684f4ace687327e6f789a94bf3d1915f881",]
+pygments = [ "78f3f434bcc5d6ee09020f92ba487f95ba50f1e3ef83ae96b9d5ffa1bab25c5d", "dbae1046def0efb574852fab9e90209b23f556367b5a320c0bcb871c77c3e8cc",]
+pytest = [ "26838b2bc58620e01675485491504c3aa7ee0faf335c37fcd5f8731ca4319591", "32c49a69566aa7c333188149ad48b58ac11a426d5352ea3d8f6ce843f88199cb",]
+pytest-cov = [ "890fe5565400902b0c78b5357004aab1c814115894f4f21370e2433256a3eeec", "03aa752cf11db41d281ea1d807d954c4eda35cfa1b21d6971966cc041bbf6e2d",]
+pytest-forked = [ "f275cb48a73fc61a6710726348e1da6d68a978f0ec0c54ece5a5fae5977e5a08", "e4500cd0509ec4a26535f7d4112a8cc0f17d3a41c29ffd4eab479d2a55b30805",]
+pytest-xdist = [ "be2662264b035920ba740ed6efb1c816a83c8a22253df7766d129f6a7bfdbd35", "e8f5744acc270b3e7d915bdb4d5f471670f049b6fbd163d4cbd52203b075d30f",]
+pyyaml = [ "3262c96a1ca437e7e4763e2843746588a965426550f3797a79fca9c6199c431f", "16b20e970597e051997d90dc2cddc713a2876c47e3d92d59ee198700c5427736", "e863072cdf4c72eebf179342c94e6989c67185842d9997960b3e69290b2fa269", "bc6bced57f826ca7cb5125a10b23fd0f2fff3b7c4701d64c439a300ce665fff8", "c01b880ec30b5a6e6aa67b09a2fe3fb30473008c85cd6a67359a1b15ed6d83a4", "827dc04b8fa7d07c44de11fabbc888e627fa8293b695e0f99cb544fdfa1bf0d1", "592766c6303207a20efc445587778322d7f73b161bd994f227adaa341ba212ab", "5f84523c076ad14ff5e6c037fe1c89a7f73a3e04cf0377cb4d017014976433f3", "0c507b7f74b3d2dd4d1322ec8a94794927305ab4cebbe89cc47fe5e81541e6e8", "b4c423ab23291d3945ac61346feeb9a0dc4184999ede5e7c43e1ffb975130ae6", "ca233c64c6e40eaa6c66ef97058cdc80e8d0157a443655baa1b2966e812807ca", "4474f8ea030b5127225b8894d626bb66c01cda098d47a2b0d3429b6700af9fd8", "326420cbb492172dec84b0f65c80942de6cedb5233c413dd824483989c000608", "5ac82e411044fb129bae5cfbeb3ba626acb2af31a8d17d175004b70862a741a7",]
+requests = [ "6a1b267aa90cac58ac3a765d067950e7dbbf75b1da07e895d1f594193a40a38b", "9c443e7324ba5b85070c4a818ade28bfabedf16ea10206da1132edaa6dda237e",]
+setuptools = [ "8fca9275c89964f13da985c3656cb00ba029d7f3916b37990927ffdf264e7926", "f7cddbb5f5c640311eb00eab6e849f7701fa70bf6a183fc8a2c33dd1d1672fb2",]
+simplegeneric = [ "dc972e06094b9af5b855b3df4a646395e43d1c9d0d39ed345b7393560d0b9173",]
+six = [ "832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb", "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9",]
+sqlalchemy = [ "2d5f08f714a886a1382c18be501e614bce50d362384dc089474019ce0768151c",]
+tox = [ "9ee7de958a43806402a38c0d2aa07fa8553f4d2c20a15b140e9f771c2afeade0", "96efa09710a3daeeb845561ebbe1497641d9cef2ee0aea30db6969058b2bda2f",]
+traitlets = [ "c6cb5e6f57c5a9bdaa40fa71ce7b4af30298fbab9ece9815b5d995ab6217c7d9", "9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835",]
+urllib3 = [ "06330f386d6e4b195fbfc736b297f58c5a892e4440e54d294d7004e3a9bbea1b", "cc44da8e1145637334317feebd728bd869a35285b93cbb4cca2577da7e62db4f",]
+virtualenv = [ "2ce32cd126117ce2c539f0134eb89de91a8413a29baac49cbab3eb50e2026669", "ca07b4c0b54e14a91af9f34d0919790b016923d157afda5efdde55c96718f752",]
+wcwidth = [ "f4ebe71925af7b40a864553f761ed559b43544f8f71746c2d756c7fe788ade7c", "3df37372226d6e63e1b1e1eda15c594bca98a22d33a23832a90998faa96bc65e",]
+werkzeug = [ "d5da73735293558eb1651ee2fddc4d0dedcfa06538b8813a2e20011583c9e49b", "c3fd7a7d41976d9f44db327260e263132466836cef6f91512889ed60ad26557c",]
+whitenoise = [ "15f43b2e701821b95c9016cf469d29e2a546cb1c7dead584ba82c36f843995cf", "9d81515f2b5b27051910996e1e860b1332e354d9e7bcf30c98f21dcb6713e0dd",]
+win-unicode-console = [ "d4142d4d56d46f449d6f00536a73625a871cba040f0bc1a2e305a04578f07d1e",]

@@ -13,9 +13,13 @@
         args:
         - --autofix
         - --indent=2
-    -   id: flake8
 -   repo: local
     hooks:
+    -   id: flake8
+        name: Flake8 - Code Linter
+        entry: flake8
+        language: system
+        types: [python]
     -   id: black
         name: Black - Code Style
         entry: black
@@ -28,5 +32,9 @@
     -   id: isort
         name: Isort - Sort Imports
         entry: isort
+        args:
+        - -e 
+        - -m 4 
+        - -w 120
         language: system
         types: [python]
