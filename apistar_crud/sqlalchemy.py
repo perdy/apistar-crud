@@ -1,9 +1,9 @@
 from typing import Any, Dict, List
 
-from apistar import http
-from apistar.exceptions import NotFound
 from sqlalchemy.orm import Session
 
+from apistar import http, types, validators
+from apistar.exceptions import NotFound
 from apistar_crud.base import BaseResource
 
 
@@ -12,7 +12,7 @@ class Resource(BaseResource):
     @classmethod
     def add_create(mcs, namespace: Dict[str, Any], model, input_type, output_type):
 
-        def create(session: Session, element: input_type) -> http.JSONResponse:
+        def create(session: Session, element: input_type) -> output_type:
             """
             Create a new element for this resource.
             """
@@ -41,7 +41,7 @@ class Resource(BaseResource):
     @classmethod
     def add_update(mcs, namespace: Dict[str, Any], model, input_type, output_type):
 
-        def update(session: Session, element_id: str, element: input_type) -> http.JSONResponse:
+        def update(session: Session, element_id: str, element: input_type) -> output_type:
             """
             Update an element of this resource.
             """
@@ -82,12 +82,15 @@ class Resource(BaseResource):
     @classmethod
     def add_drop(mcs, namespace: Dict[str, Any], model, input_type, output_type):
 
-        def drop(session: Session) -> http.JSONResponse:
+        class DropOutput(types.Type):
+            deleted = validators.Integer(title="deleted", description="Number of deleted elements", minimum=0)
+
+        def drop(session: Session) -> DropOutput:
             """
             Drop resource collection.
             """
             num_records = session.query(model).count()
             session.query(model).delete()
-            return http.JSONResponse({"deleted": num_records}, status_code=204)
+            return http.JSONResponse(DropOutput({"deleted": num_records}), status_code=204)
 
         namespace["drop"] = drop

@@ -75,7 +75,7 @@ Now create your **resource**:
         model = PuppyModel
         input_type = PuppyInputType
         output_type = PuppyOutputType
-        methods = ('create', 'retrieve', 'update', 'delete', 'list', 'drop')
+        methods = ("create", "retrieve", "update", "delete", "list", "drop")
 
 The resource generates his own **routes**, so you can add it to your main routes list:
 
@@ -84,7 +84,7 @@ The resource generates his own **routes**, so you can add it to your main routes
     from apistar import Include
 
     routes = [
-        Include('/puppy/', PuppyResource.routes, namespace='puppy'),
+        Include("/puppy", "Puppy", PuppyResource.routes),
     ]
 
 
