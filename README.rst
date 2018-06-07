@@ -2,7 +2,7 @@ API Star CRUD
 =============
 |build-status| |coverage| |version|
 
-:Version: 0.2.3
+:Version: 0.2.4
 :Status: Production/Stable
 :Author: José Antonio Perdiguero López
 
