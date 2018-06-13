@@ -1,4 +1,4 @@
-from typing import Any, Dict, Iterable
+import typing
 
 from apistar import Route
 
@@ -31,7 +31,7 @@ class BaseResource(type):
         return type(name, bases, namespace)
 
     @classmethod
-    def add_routes(mcs, namespace: Dict[str, Any], methods: Iterable[str]):
+    def add_routes(mcs, namespace: typing.Dict[str, typing.Any], methods: typing.Iterable[str]):
 
         class Routes:
             """Routes descriptor"""
@@ -42,7 +42,9 @@ class BaseResource(type):
         namespace["routes"] = Routes()
 
     @classmethod
-    def add_methods(mcs, namespace: Dict[str, Any], methods: Iterable[str], model, input_type, output_type):
+    def add_methods(
+        mcs, namespace: typing.Dict[str, typing.Any], methods: typing.Iterable[str], model, input_type, output_type
+    ):
         methods = set(methods) - set(namespace.keys())
 
         for method in methods:
@@ -54,25 +56,25 @@ class BaseResource(type):
                 )
 
     @classmethod
-    def add_create(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_create(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
         raise NotImplementedError
 
     @classmethod
-    def add_retrieve(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_retrieve(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
         raise NotImplementedError
 
     @classmethod
-    def add_update(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_update(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
         raise NotImplementedError
 
     @classmethod
-    def add_delete(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_delete(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
         raise NotImplementedError
 
     @classmethod
-    def add_list(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_list(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
         raise NotImplementedError
 
     @classmethod
-    def add_drop(mcs, namespace: Dict[str, Any], model, input_type, output_type):
+    def add_drop(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
         raise NotImplementedError

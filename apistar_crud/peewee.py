@@ -2,7 +2,7 @@ import typing
 
 from apistar import http, types, validators
 from apistar.exceptions import NotFound
-from sqlalchemy.orm import Session
+from peewee import DoesNotExist
 
 from apistar_crud.base import BaseResource
 
@@ -12,13 +12,11 @@ class Resource(BaseResource):
     @classmethod
     def add_create(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
 
-        def create(session: Session, element: input_type) -> output_type:
+        def create(element: input_type) -> output_type:
             """
             Create a new element for this resource.
             """
-            record = model(**element)
-            session.add(record)
-            session.flush()
+            record = model.create(**element)
             return http.JSONResponse(output_type(record), status_code=201)
 
         namespace["create"] = create
@@ -26,12 +24,13 @@ class Resource(BaseResource):
     @classmethod
     def add_retrieve(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
 
-        def retrieve(session: Session, element_id: str) -> output_type:
+        def retrieve(element_id: str) -> output_type:
             """
             Retrieve an element of this resource.
             """
-            record = session.query(model).get(element_id)
-            if record is None:
+            try:
+                record = model.get(element_id)
+            except DoesNotExist:
                 raise NotFound
 
             return output_type(record)
@@ -41,16 +40,19 @@ class Resource(BaseResource):
     @classmethod
     def add_update(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
 
-        def update(session: Session, element_id: str, element: input_type) -> output_type:
+        def update(element_id: str, element: input_type) -> output_type:
             """
             Update an element of this resource.
             """
-            record = session.query(model).get(element_id)
-            if record is None:
+            try:
+                record = model.get(element_id)
+            except DoesNotExist:
                 raise NotFound
 
             for k, value in element.items():
                 setattr(record, k, value)
+
+            record.save()
 
             return http.JSONResponse(output_type(record), status_code=200)
 
@@ -59,11 +61,17 @@ class Resource(BaseResource):
     @classmethod
     def add_delete(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
 
-        def delete(session: Session, element_id: str):
+        def delete(element_id: str):
             """
             Delete an element of this resource.
             """
-            session.query(model).filter_by(id=element_id).delete()
+            try:
+                record = model.get(element_id)
+            except DoesNotExist:
+                raise NotFound
+
+            record.delete_instance()
+
             return http.JSONResponse(None, status_code=204)
 
         namespace["delete"] = delete
@@ -71,11 +79,11 @@ class Resource(BaseResource):
     @classmethod
     def add_list(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
 
-        def list_(session: Session) -> typing.List[output_type]:
+        def list_() -> typing.List[output_type]:
             """
             typing.List resource collection.
             """
-            return [output_type(record) for record in session.query(model).all()]
+            return [output_type(record) for record in model.select()]
 
         namespace["list"] = list_
 
@@ -85,12 +93,11 @@ class Resource(BaseResource):
         class DropOutput(types.Type):
             deleted = validators.Integer(title="deleted", description="Number of deleted elements", minimum=0)
 
-        def drop(session: Session) -> DropOutput:
+        def drop() -> DropOutput:
             """
             Drop resource collection.
             """
-            num_records = session.query(model).count()
-            session.query(model).delete()
+            num_records = model.delete().execute()
             return http.JSONResponse(DropOutput({"deleted": num_records}), status_code=204)
 
         namespace["drop"] = drop
