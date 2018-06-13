@@ -40,19 +40,17 @@ Install API star CRUD:
 pip install apistar-crud
 ```
 
-Create a **model** for your resource:
+Follow the steps:
 
-```python
-# Example using SQL Alchemy
+1. Create an **input type** and **output type** for your resource:
+2. Define a **model** based on your ORM.
+3. Build your **resource** using the metaclass specific for your ORM.
+4. Add the **routes** for your resource.
 
-class PuppyModel(Base):
-    __tablename__ = "Puppy"
+### SQLAlchemy
+Example of a fully functional resource based on SQLAlchemy.
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
-```
-
-Create an **input type** and **output_type** for your resource:
+Create an **input type** and **output type**:
 
 ```python
 class PuppyInputType(types.Type):
@@ -63,7 +61,17 @@ class PuppyOutputType(types.Type):
     name = validators.String()
 ```
 
-Now create your **resource**:
+Define a **model**:
+
+```python
+class PuppyModel(Base):
+    __tablename__ = "Puppy"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+```
+
+The **resource**:
 
 ```python
 from apistar_crud.sqlalchemy import Resource
@@ -75,7 +83,50 @@ class PuppyResource(metaclass=Resource):
     methods = ("create", "retrieve", "update", "delete", "list", "drop")
 ```
 
-The resource generates his own **routes**, so you can add it to your main routes list:
+The resource generates his own **routes**:
+
+```python
+from apistar import Include
+
+routes = [
+    Include("/puppy", "Puppy", PuppyResource.routes),
+]
+```
+
+### Peewee
+Example of a fully functional resource based on Peewee.
+
+Create an **input type** and **output type**:
+
+```python
+class PuppyInputType(types.Type):
+    name = validators.String()
+
+class PuppyOutputType(types.Type):
+    id = validators.Integer()
+    name = validators.String()
+```
+
+Define a **model**:
+
+```python
+class PuppyModel(peewee.Model):
+    name = peewee.CharField()
+```
+
+The **resource**:
+
+```python
+from apistar_crud.peewee import Resource
+
+class PuppyResource(metaclass=Resource):
+    model = PuppyModel
+    input_type = PuppyInputType
+    output_type = PuppyOutputType
+    methods = ("create", "retrieve", "update", "delete", "list", "drop")
+```
+
+The resource generates his own **routes**:
 
 ```python
 from apistar import Include

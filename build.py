@@ -6,12 +6,7 @@ from clinner.run import Main
 
 
 class Build(Main):
-    commands = (
-        "clinner.run.commands.pytest.pytest",
-        "clinner.run.commands.sphinx.sphinx",
-        "clinner.run.commands.tox.tox",
-        "clinner.run.commands.dist.dist",
-    )
+    commands = ("clinner.run.commands.pytest.pytest", "clinner.run.commands.tox.tox")
 
 
 def main():
