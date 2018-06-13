@@ -3,7 +3,7 @@
 [![codecov](https://codecov.io/gh/PeRDy/apistar-crud/branch/master/graph/badge.svg)](https://codecov.io/gh/PeRDy/apistar-crud)
 [![PyPI version](https://badge.fury.io/py/apistar-crud.svg)](https://badge.fury.io/py/apistar-crud)
 
-* **Version:** 0.2.4
+* **Version:** :Version: 0.3.0
 * **Status:** Production/Stable
 * **Author:** José Antonio Perdiguero López
 
