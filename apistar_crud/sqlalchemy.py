@@ -63,6 +63,9 @@ class Resource(BaseResource):
             """
             Delete an element of this resource.
             """
+            if session.query(model).filter_by(id=element_id).count() == 0:
+                raise NotFound
+
             session.query(model).filter_by(id=element_id).delete()
             return http.JSONResponse(None, status_code=204)
 

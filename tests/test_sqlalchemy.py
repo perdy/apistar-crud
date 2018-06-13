@@ -104,7 +104,7 @@ class TestCaseSQLAlchemyCRUD:
         assert response.json() == [updated_puppy]
 
     def test_update_not_found(self, client, puppy):
-        # retrieve wrong record
+        # Retrieve wrong record
         response = client.put("/puppy/foo/", json=puppy)
         assert response.status_code == 404
 
@@ -126,6 +126,11 @@ class TestCaseSQLAlchemyCRUD:
 
         # Retrieve deleted record
         response = client.get("/puppy/{}".format(created_puppy["id"]))
+        assert response.status_code == 404
+
+    def test_delete_not_found(self, client, puppy):
+        # Delete wrong record
+        response = client.delete("/puppy/foo/", json=puppy)
         assert response.status_code == 404
 
     def test_list(self, client, puppy, another_puppy):
