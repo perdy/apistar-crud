@@ -60,7 +60,6 @@ def client(request):
 
 
 class TestCasePeeweeCRUD:
-
     def test_create(self, client, puppy):
         # Successfully create a new record
         response = client.post("/puppy/", json=puppy)

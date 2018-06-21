@@ -8,10 +8,8 @@ from apistar_crud.base import BaseResource
 
 
 class Resource(BaseResource):
-
     @classmethod
     def add_create(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
-
         def create(element: input_type) -> output_type:
             """
             Create a new element for this resource.
@@ -23,7 +21,6 @@ class Resource(BaseResource):
 
     @classmethod
     def add_retrieve(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
-
         def retrieve(element_id: str) -> output_type:
             """
             Retrieve an element of this resource.
@@ -39,7 +36,6 @@ class Resource(BaseResource):
 
     @classmethod
     def add_update(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
-
         def update(element_id: str, element: input_type) -> output_type:
             """
             Update an element of this resource.
@@ -60,7 +56,6 @@ class Resource(BaseResource):
 
     @classmethod
     def add_delete(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
-
         def delete(element_id: str):
             """
             Delete an element of this resource.
@@ -78,7 +73,6 @@ class Resource(BaseResource):
 
     @classmethod
     def add_list(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
-
         def list_() -> typing.List[output_type]:
             """
             typing.List resource collection.
@@ -89,7 +83,6 @@ class Resource(BaseResource):
 
     @classmethod
     def add_drop(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
-
         class DropOutput(types.Type):
             deleted = validators.Integer(title="deleted", description="Number of deleted elements", minimum=0)
 

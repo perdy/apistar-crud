@@ -32,7 +32,6 @@ class BaseResource(type):
 
     @classmethod
     def add_routes(mcs, namespace: typing.Dict[str, typing.Any], methods: typing.Iterable[str]):
-
         class Routes:
             """Routes descriptor"""
 

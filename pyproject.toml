@@ -27,8 +27,20 @@ ipython = "^6.4"
 aiofiles = "^0.3.2"
 whitenoise = "^3.3"
 peewee = "^3.5"
-apistar-peewee-orm = "^0.1.1"
+apistar-peewee-orm = "^0.3.0"
 
 [tool.poetry.extras]
 sqlalchemy = ["apistar-sqlalchemy"]
 peewee = ["apistar-peewee-orm"]
+
+[tool.black]
+line-length = 120
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.tox
+  | build
+  | dist
+)/
+'''

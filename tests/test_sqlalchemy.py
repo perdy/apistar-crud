@@ -41,7 +41,6 @@ async_app = ASyncApp(routes=routes, components=components, event_hooks=event_hoo
 
 
 class TestCaseSQLAlchemyCRUD:
-
     @pytest.fixture(scope="function", params=[app, async_app])
     def client(self, request):
         database.Base.metadata.create_all(sqlalchemy_component.engine)

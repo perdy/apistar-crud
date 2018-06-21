@@ -19,7 +19,6 @@ class PuppyOutputType(types.Type):
 
 
 class TestCaseBaseCRUDResource:
-
     @pytest.fixture(scope="function")
     def resource(self, request):
         if hasattr(request, "param"):
@@ -75,9 +74,7 @@ class TestCaseBaseCRUDResource:
         ]
 
     def test_overriden_method(self, resource):
-
         class SpecializedPuppyResource(resource):
-
             def list(self):
                 return []
 
