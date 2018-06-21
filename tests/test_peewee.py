@@ -86,7 +86,7 @@ class TestCasePeeweeCRUD:
 
     def test_retrieve_not_found(self, client):
         # retrieve wrong record
-        response = client.get("/puppy/foo/")
+        response = client.get("/puppy/43/")
         assert response.status_code == 404
 
     def test_update(self, client, puppy, another_puppy):
@@ -109,7 +109,7 @@ class TestCasePeeweeCRUD:
 
     def test_update_not_found(self, client, puppy):
         # Retrieve wrong record
-        response = client.put("/puppy/foo/", json=puppy)
+        response = client.put("/puppy/43/", json=puppy)
         assert response.status_code == 404
 
     def test_delete(self, client, puppy):
@@ -134,7 +134,7 @@ class TestCasePeeweeCRUD:
 
     def test_delete_not_found(self, client, puppy):
         # Delete wrong record
-        response = client.delete("/puppy/foo/", json=puppy)
+        response = client.delete("/puppy/43/", json=puppy)
         assert response.status_code == 404
 
     def test_list(self, client, puppy, another_puppy):

@@ -26,7 +26,7 @@ class Resource(BaseResource):
             Retrieve an element of this resource.
             """
             try:
-                record = model.get(element_id)
+                record = model.get_by_id(element_id)
             except DoesNotExist:
                 raise NotFound
 
@@ -41,7 +41,7 @@ class Resource(BaseResource):
             Update an element of this resource.
             """
             try:
-                record = model.get(element_id)
+                record = model.get_by_id(element_id)
             except DoesNotExist:
                 raise NotFound
 
@@ -61,7 +61,7 @@ class Resource(BaseResource):
             Delete an element of this resource.
             """
             try:
-                record = model.get(element_id)
+                record = model.get_by_id(element_id)
             except DoesNotExist:
                 raise NotFound
 

@@ -1,4 +1,6 @@
 # Changes
+v0.3.1 - 2018-06-21
+ * Fix peewee get by id.
 
 v0.3.0 - 2018-06-13
  * New resource based on Peewee ORM.

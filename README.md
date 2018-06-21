@@ -37,7 +37,13 @@ The **routes** for these methods are:
 Install API star CRUD:
 
 ```bash
-pip install apistar-crud
+$ pip install apistar-crud[peewee]
+```
+
+or 
+
+```
+$ pip install apistar-crud[sqlalchemy]
 ```
 
 Follow the steps:
@@ -134,4 +140,24 @@ from apistar import Include
 routes = [
     Include("/puppy", "Puppy", PuppyResource.routes),
 ]
+```
+
+----
+
+### Override methods
+
+To customize CRUD methods you can override them like:
+
+```python
+from apistar_crud.peewee import Resource
+
+class PuppyResource(metaclass=Resource):
+    model = PuppyModel
+    input_type = PuppyInputType
+    output_type = PuppyOutputType
+    methods = ("create", "retrieve", "update", "delete", "list", "drop")
+    
+    @staticmethod
+    def create(element: PuppyInputType) -> PuppyOutputType:
+        # Do your custom process
 ```

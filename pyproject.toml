@@ -12,7 +12,7 @@ keywords = ["apistar", "resource", "crud", "django", "sqlalchemy"]
 include = ["apistar_crud/**/*.py"]
 
 [tool.poetry.dependencies]
-python = "^3.5"
+python = "^3.6"
 apistar = "^0.5.30"
 
 [tool.poetry.dev-dependencies]
@@ -22,7 +22,7 @@ pytest-cov = "^2.5"
 sqlalchemy = "^1.2"
 apistar-sqlalchemy = "^0.3.1"
 tox = "^3.0"
-clinner = "^1.9"
+clinner = "^1.10"
 ipython = "^6.4"
 aiofiles = "^0.3.2"
 whitenoise = "^3.3"
