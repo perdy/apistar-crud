@@ -1,4 +1,7 @@
 # Changes
+v0.4.0 - 2018-07-03
+ * List method now can filter.
+
 v0.3.1 - 2018-06-21
  * Fix peewee get by id.
 

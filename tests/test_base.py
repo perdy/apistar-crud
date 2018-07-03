@@ -73,10 +73,11 @@ class TestCaseBaseCRUDResource:
             resource.drop,
         ]
 
-    def test_overriden_method(self, resource):
+    def test_override_method(self, resource):
         class SpecializedPuppyResource(resource):
-            def list(self):
-                return []
+            @classmethod
+            def list(cls):
+                raise ValueError
 
         assert hasattr(SpecializedPuppyResource, "create")
         assert hasattr(SpecializedPuppyResource, "retrieve")
@@ -84,13 +85,8 @@ class TestCaseBaseCRUDResource:
         assert hasattr(SpecializedPuppyResource, "delete")
         assert hasattr(SpecializedPuppyResource, "list")
         assert len(SpecializedPuppyResource.routes) == 5
-        assert [route.handler for route in SpecializedPuppyResource.routes] == [
-            resource.create,
-            resource.retrieve,
-            resource.update,
-            resource.delete,
-            SpecializedPuppyResource.list,
-        ]
+        with pytest.raises(ValueError):
+            SpecializedPuppyResource.list()
 
     def test_new_no_model(self):
         with pytest.raises(AttributeError):

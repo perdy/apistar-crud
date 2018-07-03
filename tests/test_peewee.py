@@ -1,6 +1,8 @@
+import typing
+
 import peewee
 import pytest
-from apistar import App, ASyncApp, Include, TestClient, types, validators
+from apistar import App, ASyncApp, Include, TestClient, http, types, validators
 from apistar_peewee_orm import PeeweeDatabaseComponent, PeeweeTransactionHook
 
 from apistar_crud.peewee import Resource
@@ -29,6 +31,10 @@ class PuppyResource(metaclass=Resource):
     input_type = PuppyInputType
     output_type = PuppyOutputType
     methods = ("create", "retrieve", "update", "delete", "list", "drop")
+
+    @classmethod
+    def list(cls, name: http.QueryParam) -> typing.List[PuppyOutputType]:
+        return cls._list(name=name)
 
 
 routes = [Include("/puppy", "puppy", PuppyResource.routes)]
@@ -154,6 +160,24 @@ class TestCasePeeweeCRUD:
         response = client.get("/puppy/")
         assert response.status_code == 200
         assert response.json() == [created_puppy, created_second_puppy]
+
+    def test_list_filter(self, client, puppy, another_puppy):
+        # Successfully create a new record
+        response = client.post("/puppy/", json=puppy)
+        assert response.status_code == 201
+        created_puppy = response.json()
+        assert created_puppy["name"] == "canna"
+
+        # Successfully create another new record
+        response = client.post("/puppy/", json=another_puppy)
+        assert response.status_code == 201
+        created_second_puppy = response.json()
+        assert created_second_puppy["name"] == "puppito"
+
+        # List all the existing records
+        response = client.get("/puppy/", params={"name": "canna"})
+        assert response.status_code == 200
+        assert response.json() == [created_puppy]
 
     def test_drop(self, client, puppy):
         # Successfully create a new record

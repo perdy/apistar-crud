@@ -9,8 +9,8 @@ from apistar_crud.base import BaseResource
 
 class Resource(BaseResource):
     @classmethod
-    def add_create(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
-        def create(session: Session, element: input_type) -> output_type:
+    def add_create(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
+        def create(cls, session: Session, element: input_type) -> output_type:
             """
             Create a new element for this resource.
             """
@@ -19,11 +19,11 @@ class Resource(BaseResource):
             session.flush()
             return http.JSONResponse(output_type(record), status_code=201)
 
-        namespace["create"] = create
+        return {"_create": classmethod(create)}
 
     @classmethod
-    def add_retrieve(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
-        def retrieve(session: Session, element_id: str) -> output_type:
+    def add_retrieve(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
+        def retrieve(cls, session: Session, element_id: str) -> output_type:
             """
             Retrieve an element of this resource.
             """
@@ -33,11 +33,11 @@ class Resource(BaseResource):
 
             return output_type(record)
 
-        namespace["retrieve"] = retrieve
+        return {"_retrieve": classmethod(retrieve)}
 
     @classmethod
-    def add_update(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
-        def update(session: Session, element_id: str, element: input_type) -> output_type:
+    def add_update(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
+        def update(cls, session: Session, element_id: str, element: input_type) -> output_type:
             """
             Update an element of this resource.
             """
@@ -50,11 +50,11 @@ class Resource(BaseResource):
 
             return http.JSONResponse(output_type(record), status_code=200)
 
-        namespace["update"] = update
+        return {"_update": classmethod(update)}
 
     @classmethod
-    def add_delete(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
-        def delete(session: Session, element_id: str):
+    def add_delete(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
+        def delete(cls, session: Session, element_id: str) -> typing.Dict[str, typing.Any]:
             """
             Delete an element of this resource.
             """
@@ -64,24 +64,36 @@ class Resource(BaseResource):
             session.query(model).filter_by(id=element_id).delete()
             return http.JSONResponse(None, status_code=204)
 
-        namespace["delete"] = delete
+        return {"_delete": classmethod(delete)}
 
     @classmethod
-    def add_list(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
-        def list_(session: Session) -> typing.List[output_type]:
+    def add_list(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
+        def list_(cls, session: Session, **filters) -> typing.List[output_type]:
             """
-            typing.List resource collection.
+            List resource collection.
             """
-            return [output_type(record) for record in session.query(model).all()]
+            return cls._filter(session, **filters)
 
-        namespace["list"] = list_
+        def filter_(cls, session: Session, **filters) -> typing.List[output_type]:
+            """
+            Filter resource collection.
+            """
+            filters = {k: v for k, v in filters.items() if v}
+            if filters:
+                queryset = session.query(model).filter_by(**filters)
+            else:
+                queryset = session.query(model).all()
+
+            return [output_type(record) for record in queryset]
+
+        return {"_list": classmethod(list_), "_filter": classmethod(filter_)}
 
     @classmethod
-    def add_drop(mcs, namespace: typing.Dict[str, typing.Any], model, input_type, output_type):
+    def add_drop(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
         class DropOutput(types.Type):
             deleted = validators.Integer(title="deleted", description="Number of deleted elements", minimum=0)
 
-        def drop(session: Session) -> DropOutput:
+        def drop(cls, session: Session) -> DropOutput:
             """
             Drop resource collection.
             """
@@ -89,4 +101,4 @@ class Resource(BaseResource):
             session.query(model).delete()
             return http.JSONResponse(DropOutput({"deleted": num_records}), status_code=204)
 
-        namespace["drop"] = drop
+        return {"_drop": classmethod(drop)}
