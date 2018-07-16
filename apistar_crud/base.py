@@ -1,3 +1,4 @@
+import re
 import typing
 
 from apistar import Route
@@ -17,14 +18,24 @@ class BaseResource(type):
 
     def __new__(mcs, name, bases, namespace):
         try:
+            resource_name = namespace.get("name", name.lower())
             model = namespace["model"]
             input_type = namespace["input_type"]
             output_type = namespace["output_type"]
         except KeyError as e:
             raise AttributeError('{} needs to define attribute: "{}"'.format(name, e))
 
+        # Check resource name validity
+        if re.match("[a-zA-Z][-_a-zA-Z]", resource_name) is None:
+            raise AttributeError('Invalid resource name "{}"'.format(resource_name))
+
+        # Add valid name and verbose name
+        namespace["name"] = resource_name
+        namespace["verbose_name"] = namespace.get("verbose_name", namespace["name"])
+
         methods = namespace.get("methods", mcs.DEFAULT_METHODS)
 
+        # Create CRUD methods and routes
         mcs.add_methods(namespace, methods, model, input_type, output_type)
         mcs.add_routes(namespace, methods)
 
