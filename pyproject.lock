@@ -33,6 +33,17 @@ pyyaml = "*"
 werkzeug = "*"
 whitenoise = "*"
 [[package]]
+name = "apistar-pagination"
+version = "0.1.0"
+description = "Pagination tools for API Star."
+category = "main"
+optional = false
+python-versions = ">=3.5,<4.0"
+platform = "*"
+
+[package.dependencies]
+apistar = ">=0.5.30,<0.6.0"
+[[package]]
 name = "apistar-peewee-orm"
 version = "0.3.0"
 description = "Peewee integration for API Star."
@@ -586,7 +597,7 @@ platform = "*"
 [metadata]
 python-versions = "^3.6"
 platform = "*"
-content-hash = "710e2b38a2182cd78c609aaf38289c895768db7a1884332816de850fc61db5b3"
+content-hash = "310436480f799eaa0deef834eafe113583777b2bfc4f47a5dd71c06c4071f926"
 
 [extras]
 sqlalchemy = []
@@ -596,6 +607,7 @@ peewee = []
 aiofiles = [ "25c66ea3872d05d53292a6b3f7fa0f86691512076446d83a505d227b5e76f668", "852a493a877b73e11823bfd4e8e5ef2610d70d12c9eaed961bcd9124d8de8c10",]
 apipkg = [ "65d2aa68b28e7d31233bb2ba8eb31cda40e4671f8ac2d6b241e358c9652a74b9", "2e38399dbe842891fe85392601aab8f40a8f4cc5a9053c326de35a1cc0297ac6",]
 apistar = [ "9158cbdc0449751f0efbc98800546c1cd212f1ff6f8b2a11d2f9df4fcf943110",]
+apistar-pagination = [ "229f05de3ef7a319ae1c888a025152b2edba70f289321f6d5ee74055ad6c4a56", "26ec65cee472c93d209f819ad062529537d093a1c0a824ffa5a0ee7cfcbe3527",]
 apistar-peewee-orm = [ "5020b5161837d5f75f3f816edb184c3a9887db8a7c974f90ca9dd754e0bc8468", "75564fe73572b91efd87ff7e43aaba986257683a91834f03f266dca1f9955c43",]
 apistar-sqlalchemy = [ "d220a76363526aa89766ee2de196d95d84946db71ccf23e87186934800107f18", "df2af9e58a9a2960e0f90506466fd04c60cedff13bf68c625002399302488288",]
 appnope = [ "5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0", "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71",]

@@ -5,6 +5,7 @@ from apistar.exceptions import NotFound
 from sqlalchemy.orm import Session
 
 from apistar_crud.base import BaseResource
+from apistar_pagination import PageNumberResponse
 
 
 class Resource(BaseResource):
@@ -68,12 +69,6 @@ class Resource(BaseResource):
 
     @classmethod
     def add_list(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
-        def list_(cls, session: Session, **filters) -> typing.List[output_type]:
-            """
-            List resource collection.
-            """
-            return cls._filter(session, **filters)
-
         def filter_(cls, session: Session, **filters) -> typing.List[output_type]:
             """
             Filter resource collection.
@@ -85,6 +80,12 @@ class Resource(BaseResource):
                 queryset = session.query(model).all()
 
             return [output_type(record) for record in queryset]
+
+        def list_(cls, page: http.QueryParam, page_size: http.QueryParam, **filters) -> typing.List[output_type]:
+            """
+            List resource collection.
+            """
+            return PageNumberResponse(page=page, page_size=page_size, content=cls._filter(**filters))
 
         return {"_list": classmethod(list_), "_filter": classmethod(filter_)}
 
