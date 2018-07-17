@@ -88,7 +88,9 @@ class Resource(BaseResource):
 
             return [output_type(record) for record in queryset]
 
-        def list_(cls, page: http.QueryParam, page_size: http.QueryParam, **filters) -> typing.List[output_type]:
+        def list_(
+            cls, page: http.QueryParam = None, page_size: http.QueryParam = None, **filters
+        ) -> typing.List[output_type]:
             """
             List resource collection.
             """

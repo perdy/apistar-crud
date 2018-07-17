@@ -27,6 +27,9 @@ class PuppyOutputType(types.Type):
 
 
 class PuppyResource(metaclass=Resource):
+    name = "puppy"
+    verbose_name = "Puppy"
+
     model = PuppyModel
     input_type = PuppyInputType
     output_type = PuppyOutputType

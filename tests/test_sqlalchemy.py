@@ -27,6 +27,9 @@ class PuppyOutputType(types.Type):
 
 
 class PuppyResource(metaclass=Resource):
+    name = "puppy"
+    verbose_name = "Puppy"
+
     model = PuppyModel
     input_type = PuppyInputType
     output_type = PuppyOutputType
@@ -34,7 +37,7 @@ class PuppyResource(metaclass=Resource):
 
     @classmethod
     def list(cls, session: Session, name: http.QueryParam) -> typing.List[PuppyOutputType]:
-        return cls._list(session, name=name)
+        return cls._list(session=session, name=name)
 
 
 routes = [Include("/puppy", "puppy", PuppyResource.routes)]

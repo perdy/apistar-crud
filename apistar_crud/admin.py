@@ -33,7 +33,7 @@ class Admin:
 
         return app.render_template("apistar_crud/admin_list.html", **context)
 
-    def detail(self, app: App, resource_name: str, resource_id: int):
+    def detail(self, app: App, resource_name: str, resource_id: str):
         """
         Admin page presenting a detailed view of a resource object.
         """
