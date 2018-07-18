@@ -1,7 +1,7 @@
 import pytest
 from apistar import types, validators
 
-from apistar_crud.sqlalchemy import Resource
+from apistar_crud.resource.sqlalchemy import Resource
 
 
 class PuppyModel:

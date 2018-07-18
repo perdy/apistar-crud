@@ -14,7 +14,7 @@ class Admin:
         """
         context = {
             "resources": {
-                resource.verbose_name: app.reverse_url("{}:list".format(resource.name))
+                resource.verbose_name: app.reverse_url("admin:list", resource_name=resource.name)
                 for resource in self.resources.values()
             }
         }

@@ -1,20 +1,20 @@
 import typing
 
+import peewee
 import pytest
 from apistar import App, ASyncApp, Include, TestClient, http, types, validators
-from apistar_sqlalchemy import database
-from apistar_sqlalchemy.components import SQLAlchemySessionComponent
-from apistar_sqlalchemy.event_hooks import SQLAlchemyTransactionHook
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import Session
+from apistar_peewee_orm import PeeweeDatabaseComponent, PeeweeTransactionHook
 
-from apistar_crud.sqlalchemy import Resource
+from apistar_crud.resource.peewee import Resource
+
+database_component = PeeweeDatabaseComponent(url="sqlite+pool://")
 
 
-class PuppyModel(database.Base):
-    __tablename__ = "Puppy"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String)
+class PuppyModel(peewee.Model):
+    name = peewee.CharField()
+
+    class Meta:
+        database = database_component.database
 
 
 class PuppyInputType(types.Type):
@@ -36,35 +36,39 @@ class PuppyResource(metaclass=Resource):
     methods = ("create", "retrieve", "update", "delete", "list", "drop")
 
     @classmethod
-    def list(cls, session: Session, name: http.QueryParam) -> typing.List[PuppyOutputType]:
-        return cls._list(session=session, name=name)
+    def list(cls, name: http.QueryParam) -> typing.List[PuppyOutputType]:
+        return cls._list(name=name)
 
 
 routes = [Include("/puppy", "puppy", PuppyResource.routes)]
 
-sqlalchemy_component = SQLAlchemySessionComponent(url="sqlite://")
-components = [sqlalchemy_component]
-event_hooks = [SQLAlchemyTransactionHook()]
+components = [database_component]
+event_hooks = [PeeweeTransactionHook()]
 
 app = App(routes=routes, components=components, event_hooks=event_hooks)
 async_app = ASyncApp(routes=routes, components=components, event_hooks=event_hooks)
 
 
-class TestCaseSQLAlchemyCRUD:
-    @pytest.fixture(scope="function", params=[app, async_app])
-    def client(self, request):
-        database.Base.metadata.create_all(sqlalchemy_component.engine)
-        yield TestClient(request.param)
-        database.Base.metadata.drop_all(sqlalchemy_component.engine)
+@pytest.fixture
+def puppy():
+    return {"name": "canna"}
 
-    @pytest.fixture
-    def puppy(self):
-        return {"name": "canna"}
 
-    @pytest.fixture
-    def another_puppy(self):
-        return {"name": "puppito"}
+@pytest.fixture
+def another_puppy():
+    return {"name": "puppito"}
 
+
+@pytest.fixture(params=[app, async_app])
+def client(request):
+    with database_component.database:
+        database_component.database.create_tables([PuppyModel])
+    yield TestClient(request.param)
+    with database_component.database:
+        database_component.database.drop_tables([PuppyModel])
+
+
+class TestCasePeeweeCRUD:
     def test_create(self, client, puppy):
         # Successfully create a new record
         response = client.post("/puppy/", json=puppy)
@@ -91,7 +95,7 @@ class TestCaseSQLAlchemyCRUD:
 
     def test_retrieve_not_found(self, client):
         # retrieve wrong record
-        response = client.get("/puppy/foo/")
+        response = client.get("/puppy/43/")
         assert response.status_code == 404
 
     def test_update(self, client, puppy, another_puppy):
@@ -114,7 +118,7 @@ class TestCaseSQLAlchemyCRUD:
 
     def test_update_not_found(self, client, puppy):
         # Retrieve wrong record
-        response = client.put("/puppy/foo/", json=puppy)
+        response = client.put("/puppy/43/", json=puppy)
         assert response.status_code == 404
 
     def test_delete(self, client, puppy):
@@ -139,7 +143,7 @@ class TestCaseSQLAlchemyCRUD:
 
     def test_delete_not_found(self, client, puppy):
         # Delete wrong record
-        response = client.delete("/puppy/foo/", json=puppy)
+        response = client.delete("/puppy/43/", json=puppy)
         assert response.status_code == 404
 
     def test_list(self, client, puppy, another_puppy):

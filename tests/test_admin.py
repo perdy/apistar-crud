@@ -5,7 +5,7 @@ from apistar import types, validators
 from apistar.exceptions import NotFound
 
 from apistar_crud.admin import Admin
-from apistar_crud.peewee import Resource
+from apistar_crud.resource.peewee import Resource
 
 
 class PuppyModel:

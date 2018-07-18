@@ -1,7 +1,7 @@
 import pytest
 from apistar import types, validators
 
-from apistar_crud.peewee import Resource
+from apistar_crud.resource.peewee import Resource
 from apistar_crud.routes import RouteOptions, Routes
 
 
@@ -50,14 +50,14 @@ class TestCaseRoutes:
     def test_routes(self, routes):
         r = routes.routes()
 
-        assert r[0].url == "/puppy/"
+        assert r[0].url == "/puppy"
         assert r[0].name == "puppy"
 
-        assert r[1].url == "/admin/"
+        assert r[1].url == "/admin"
         assert r[1].name == "admin"
 
     def test_routes_no_admin(self, routes):
         r = routes.routes(admin=None)
 
-        assert r[0].url == "/puppy/"
+        assert r[0].url == "/puppy"
         assert r[0].name == "puppy"

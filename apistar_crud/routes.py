@@ -22,10 +22,10 @@ class Routes:
         :param url: Route url.
         :param admin: True if should be added to admin site.
         """
-        url = url or "/{}/".format(resource.name)
+        url = url or "/{}".format(resource.name)
         self.resources[resource] = RouteOptions(url, admin)
 
-    def routes(self, admin="/admin/") -> typing.List[Include]:
+    def routes(self, admin="/admin") -> typing.List[Include]:
         """
         Generate the list of routes for all resources and admin views.
 
