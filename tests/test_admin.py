@@ -102,17 +102,17 @@ class TestCaseAdmin:
         assert admin.routes[0].handler == admin.main
         assert admin.routes[0].documented is False
 
-        assert admin.routes[1].url == "/metadata"
+        assert admin.routes[1].url == "/metadata/"
         assert admin.routes[1].method == "GET"
         assert admin.routes[1].handler == admin.metadata
         assert admin.routes[1].documented is False
 
-        assert admin.routes[2].url == "/{resource_name}"
+        assert admin.routes[2].url == "/{resource_name}/"
         assert admin.routes[2].method == "GET"
         assert admin.routes[2].handler == admin.list
         assert admin.routes[2].documented is False
 
-        assert admin.routes[3].url == "/{resource_name}/{resource_id}"
+        assert admin.routes[3].url == "/{resource_name}/{resource_id}/"
         assert admin.routes[3].method == "GET"
         assert admin.routes[3].handler == admin.detail
         assert admin.routes[3].documented is False

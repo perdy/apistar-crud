@@ -96,7 +96,7 @@ class Admin:
     def routes(self) -> typing.List[Route]:
         return [
             Route("/", "GET", self.main, name="main", documented=False),
-            Route("/metadata", "GET", self.metadata, name="metadata", documented=False),
-            Route("/{resource_name}", "GET", self.list, name="list", documented=False),
-            Route("/{resource_name}/{resource_id}", "GET", self.detail, name="detail", documented=False),
+            Route("/metadata/", "GET", self.metadata, name="metadata", documented=False),
+            Route("/{resource_name}/", "GET", self.list, name="list", documented=False),
+            Route("/{resource_name}/{resource_id}/", "GET", self.detail, name="detail", documented=False),
         ]
