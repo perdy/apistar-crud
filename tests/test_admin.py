@@ -67,24 +67,22 @@ class TestCaseAdmin:
         assert app.render_template.call_args_list == expected_calls
 
     def test_list(self, admin, app):
-        expected_calls = [call("apistar_crud/admin_list.html", resource="Puppy", url="/foo")]
-
         admin.list(app, "puppy")
 
-        assert app.render_template.call_args_list == expected_calls
+        assert app.render_template.call_count == 1
+        assert app.render_template.call_args[0][0] == "apistar_crud/admin_list.html"
 
     def test_list_resource_not_found(self, admin, app):
         with pytest.raises(NotFound):
             admin.list(app, "Foo")
 
-    def test_detail(self, app, resource, obj):
+    def test_detail(self, app, resource):
         admin = Admin(resource)
-
-        expected_calls = [call("apistar_crud/admin_detail.html", resource="foo", url="/foo", id="1", obj=obj)]
 
         admin.detail(app, "foo", "1")
 
-        assert app.render_template.call_args_list == expected_calls
+        assert app.render_template.call_count == 1
+        assert app.render_template.call_args[0][0] == "apistar_crud/admin_detail.html"
 
     def test_detail_resource_not_found(self, admin, app):
         with pytest.raises(NotFound):

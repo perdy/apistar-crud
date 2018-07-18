@@ -8,16 +8,23 @@ class Admin:
     def __init__(self, *resources):
         self.resources = {resource.name: resource for resource in resources}
 
+    def resource_admin_urls(self, app) -> typing.Dict[str, str]:
+        """
+        Build a mapping of resources and admin urls.
+
+        :param app: API Star app.
+        :return: Resource admin urls.
+        """
+        return {
+            resource.verbose_name: app.reverse_url("admin:list", resource_name=resource.name)
+            for resource in self.resources.values()
+        }
+
     def main(self, app: App):
         """
         Admin main page presenting a list of resources.
         """
-        context = {
-            "resources": {
-                resource.verbose_name: app.reverse_url("admin:list", resource_name=resource.name)
-                for resource in self.resources.values()
-            }
-        }
+        context = {"resources": self.resource_admin_urls(app)}
 
         return app.render_template("apistar_crud/admin_main.html", **context)
 
@@ -27,7 +34,11 @@ class Admin:
         """
         try:
             resource = self.resources[resource_name]
-            context = {"resource": resource.verbose_name, "url": app.reverse_url("{}:list".format(resource_name))}
+            context = {
+                "resources": self.resource_admin_urls(app),
+                "resource": resource.verbose_name,
+                "url": app.reverse_url("{}:list".format(resource_name)),
+            }
         except KeyError:
             raise NotFound
 
@@ -40,6 +51,7 @@ class Admin:
         try:
             resource = self.resources[resource_name]
             context = {
+                "resources": self.resource_admin_urls(app),
                 "resource": resource.verbose_name,
                 "url": app.reverse_url("{}:list".format(resource_name)),
                 "id": resource_id,
