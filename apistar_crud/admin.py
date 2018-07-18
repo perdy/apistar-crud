@@ -1,6 +1,7 @@
 import typing
 
 from apistar import App, Route
+from apistar.codecs import JSONSchemaCodec
 from apistar.exceptions import NotFound
 
 
@@ -8,7 +9,7 @@ class Admin:
     def __init__(self, *resources):
         self.resources = {resource.name: resource for resource in resources}
 
-    def resource_admin_urls(self, app) -> typing.Dict[str, str]:
+    def _resource_admin_urls(self, app) -> typing.Dict[str, str]:
         """
         Build a mapping of resources and admin urls.
 
@@ -20,11 +21,20 @@ class Admin:
             for resource in self.resources.values()
         }
 
+    def _resource_schema(self, resource) -> typing.Dict[str, typing.Any]:
+        """
+        Generate resource input schema.
+
+        :param resource: Resource.
+        :return: Schema
+        """
+        return JSONSchemaCodec().encode_to_data_structure(resource.input_type)
+
     def main(self, app: App):
         """
         Admin main page presenting a list of resources.
         """
-        context = {"resources": self.resource_admin_urls(app)}
+        context = {"resources": self._resource_admin_urls(app)}
 
         return app.render_template("apistar_crud/admin_main.html", **context)
 
@@ -35,9 +45,12 @@ class Admin:
         try:
             resource = self.resources[resource_name]
             context = {
-                "resources": self.resource_admin_urls(app),
-                "resource": resource.verbose_name,
-                "url": app.reverse_url("{}:list".format(resource_name)),
+                "resources": self._resource_admin_urls(app),
+                "resource": {
+                    "name": resource.verbose_name,
+                    "url": app.reverse_url("{}:list".format(resource_name)),
+                    "schema": self._resource_schema(resource),
+                },
             }
         except KeyError:
             raise NotFound
@@ -51,11 +64,14 @@ class Admin:
         try:
             resource = self.resources[resource_name]
             context = {
-                "resources": self.resource_admin_urls(app),
-                "resource": resource.verbose_name,
-                "url": app.reverse_url("{}:list".format(resource_name)),
-                "id": resource_id,
-                "obj": resource.retrieve(resource_id),
+                "resources": self._resource_admin_urls(app),
+                "resource": {
+                    "name": resource.verbose_name,
+                    "url": app.reverse_url("{}:list".format(resource_name)),
+                    "schema": self._resource_schema(resource),
+                    "id": resource_id,
+                    "obj": resource.retrieve(resource_id),
+                },
             }
         except KeyError:
             raise NotFound
