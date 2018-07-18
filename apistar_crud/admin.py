@@ -1,15 +1,21 @@
+import json
 import typing
 
-from apistar import App, Route
-from apistar.codecs import JSONSchemaCodec
+from apistar import App, Route, types, validators
+from apistar.codecs import JSONSchemaCodec, OpenAPICodec
 from apistar.exceptions import NotFound
+
+
+class Metadata(types.Type):
+    resources = validators.Object(title="resources", description="Resource list")
+    schema = validators.Object(title="schema", description="OpenAPI schema")
 
 
 class Admin:
     def __init__(self, *resources):
         self.resources = {resource.name: resource for resource in resources}
 
-    def _resource_admin_urls(self, app) -> typing.Dict[str, str]:
+    def _resource_admin_urls(self, app: App) -> typing.Dict[str, str]:
         """
         Build a mapping of resources and admin urls.
 
@@ -37,6 +43,14 @@ class Admin:
         context = {"resources": self._resource_admin_urls(app)}
 
         return app.render_template("apistar_crud/admin_main.html", **context)
+
+    def metadata(self, app: App) -> Metadata:
+        """
+        Admin metadata.
+        """
+        return Metadata(
+            {"resources": self._resource_admin_urls(app), "schema": json.loads(OpenAPICodec().encode(app.document))}
+        )
 
     def list(self, app: App, resource_name: str):
         """
@@ -82,6 +96,7 @@ class Admin:
     def routes(self) -> typing.List[Route]:
         return [
             Route("/", "GET", self.main, name="main", documented=False),
-            Route("/{resource_name}/", "GET", self.list, name="list", documented=False),
-            Route("/{resource_name}/{resource_id}/", "GET", self.detail, name="detail", documented=False),
+            Route("/metadata", "GET", self.metadata, name="metadata", documented=False),
+            Route("/{resource_name}", "GET", self.list, name="list", documented=False),
+            Route("/{resource_name}/{resource_id}", "GET", self.detail, name="detail", documented=False),
         ]
