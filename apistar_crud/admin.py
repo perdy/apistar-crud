@@ -1,14 +1,13 @@
-import json
 import typing
 
 from apistar import App, Route, types, validators
-from apistar.codecs import JSONSchemaCodec, OpenAPICodec
+from apistar.codecs import JSONSchemaCodec
 from apistar.exceptions import NotFound
 
 
 class Metadata(types.Type):
     resources = validators.Object(title="resources", description="Resource list")
-    schema = validators.Object(title="schema", description="OpenAPI schema")
+    schema = validators.String(title="schema", description="OpenAPI schema")
 
 
 class Admin:
@@ -48,9 +47,7 @@ class Admin:
         """
         Admin metadata.
         """
-        return Metadata(
-            {"resources": self._resource_admin_urls(app), "schema": json.loads(OpenAPICodec().encode(app.document))}
-        )
+        return Metadata({"resources": self._resource_admin_urls(app), "schema": app.reverse_url("serve_schema")})
 
     def list(self, app: App, resource_name: str):
         """

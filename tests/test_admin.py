@@ -72,7 +72,7 @@ class TestCaseAdmin:
         response = admin.metadata(app)
 
         assert "Puppy" in response.resources
-        assert response.schema is not None
+        assert response.schema == app.reverse_url("serve_schema")
 
     def test_list(self, admin, app):
         admin.list(app, "puppy")
