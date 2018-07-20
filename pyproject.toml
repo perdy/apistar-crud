@@ -14,7 +14,7 @@ include = ["apistar_crud/**/*.py"]
 [tool.poetry.dependencies]
 python = "^3.6"
 apistar = "^0.5.30"
-apistar-pagination = "^0.1.0"
+apistar-pagination = "^0.3.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.6"
