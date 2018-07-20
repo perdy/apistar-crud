@@ -3,30 +3,28 @@ import ReactDOM from 'react-dom';
 import App from './AppContainer';
 import './index.css';
 
+import createHistory from 'history/createBrowserHistory';
+
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 
-// import reducers from './reducers'
 import createSagaMiddleware from 'redux-saga';
 
 import reducers from './ducks';
 import sagas from './sagas';
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles/';
 
-import { blue800, amber50 } from 'material-ui/styles/colors';
-
-const muiTheme = getMuiTheme({
+const muiTheme = createMuiTheme({
   palette: {
-    accent1Color: amber50,
+    primary: { main: '#31CACC', contrastText: '#fff' },
   },
-  tabs: {
-    backgroundColor: blue800,
-  },
+  tabs: {},
 });
 
+export const history = createHistory();
 const sagaMiddleware = createSagaMiddleware();
 
 let composeEnhancers = compose;
@@ -40,8 +38,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 const store = createStore(
-  reducers,
-  composeEnhancers(applyMiddleware(sagaMiddleware))
+  connectRouter(history)(reducers),
+  composeEnhancers(applyMiddleware(routerMiddleware(history), sagaMiddleware))
 );
 
 sagaMiddleware.run(sagas);
@@ -49,7 +47,7 @@ sagaMiddleware.run(sagas);
 injectTapEventPlugin();
 
 ReactDOM.render(
-  <MuiThemeProvider muiTheme={muiTheme}>
+  <MuiThemeProvider theme={muiTheme}>
     <Provider store={store}>
       <App />
     </Provider>

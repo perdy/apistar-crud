@@ -2,19 +2,22 @@ import { call, put, select, takeLatest } from 'redux-saga/effects';
 import { selectClient } from '../selectors/schema';
 import { push } from 'react-router-redux';
 
+import { REL_PATH } from '../api';
 import {
   FETCH_RESOURCE_ENTITIES_REQUEST,
-  SUBMIT_RESOURCE_REQUEST,
-  fetchResourceEntitiesSuccess,
-  submitResourceSuccess,
   FETCH_CURRENT_RESOURCE_REQUEST,
-  fetchCurrentResourceSuccess,
+  SUBMIT_RESOURCE_REQUEST,
   UPDATE_RESOURCE_ELEMENT_REQUEST,
+  fetchResourceEntitiesSuccess,
+  fetchCurrentResourceSuccess,
+  submitResourceSuccess,
   updateResourceElementSuccess,
+  submitResourceFailure,
 } from '../ducks/resource';
 import Api from '../api';
 
 function* fetchResource({ payload }) {
+  const { query } = payload;
   try {
     let client = yield select(selectClient);
     if (!client) {
@@ -23,7 +26,7 @@ function* fetchResource({ payload }) {
       client = yield call(Api.fetchSwaggerSchema, schema);
     }
     const resources = yield call(Api.fetchResource, payload, client);
-    yield put(fetchResourceEntitiesSuccess(resources));
+    yield put(fetchResourceEntitiesSuccess({ resources, query }));
   } catch (error) {
     throw Error(error);
   }
@@ -34,9 +37,11 @@ function* submitResource({ payload }) {
     const client = yield select(selectClient);
     const response = yield call(Api.submitResource, payload, client);
     yield put(submitResourceSuccess(response));
-    yield put(push(`${payload.resourceName}/${response.id}`));
+    yield put(push(`${REL_PATH}${payload.resourceName}`));
   } catch (error) {
-    throw Error(error);
+    const errors = JSON.parse(error.message);
+    yield put(submitResourceFailure(errors));
+    // throw Error(error.message);
   }
 }
 
@@ -45,6 +50,7 @@ function* updateResourceElement({ payload }) {
     const client = yield select(selectClient);
     const response = yield call(Api.updateResourceElement, payload, client);
     yield put(updateResourceElementSuccess(response));
+    yield put(push(`${REL_PATH}${payload.resourceName}`));
   } catch (error) {}
 }
 

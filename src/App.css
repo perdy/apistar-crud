@@ -1,3 +1,71 @@
-.App {
-  text-align: center;
+body {
+  background-color: #FAFAFA;
+}
+
+.MainContainer {
+  padding-top: 25px;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+}
+@media (min-width: 768px) {
+  .MainContainer {
+    width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .MainContainer {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .MainContainer {
+    width: 1170px;
+  }
+}
+
+.HeaderLink {
+  color: #fff;
+  text-decoration: none;
+}
+
+.TableContainer {
+  overflow-x: scroll;
+}
+
+.TableTitle {
+  display: inline-block !important;
+}
+
+.TableActions {
+  display: flex;
+}
+
+.PanelTitle {
+  padding: 15px 25px;
+}
+
+.ButtonNew {
+  margin-top: 10px !important;
+  margin-right: 10px !important;
+  float: right;
+}
+
+.ButtonSave {
+  margin-top: 20px !important;
+  float: right;
+}
+
+.ResourceFormContainer {
+  padding: 15px 25px;
+}
+
+.SpinnerContainer {
+  width: 100%;
+  height: 100%;
+  padding: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

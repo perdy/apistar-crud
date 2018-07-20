@@ -3,10 +3,20 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
+import {
+  Typography,
+  Grid,
+  Paper,
+  List,
+  ListItem,
+  ListItemText,
+} from '@material-ui/core';
+
 const propTypes = {
   metadata: PropTypes.shape({
     resources: PropTypes.object,
-    schema: PropTypes.object,
+    schema: PropTypes.string,
+    client: PropTypes.object,
   }),
 };
 
@@ -15,13 +25,31 @@ class HomePage extends React.Component {
     const { resources } = this.props.metadata;
     return (
       resources && (
-        <div>
-          {Object.entries(resources).map(resource => (
-            <Link to={resource[1]} key={resource[0]}>
-              {resource[0]}
-            </Link>
-          ))}
-        </div>
+        <Grid container alignItems="center">
+          <Grid item xs={12} sm={6}>
+            <Paper square>
+              <Typography variant="title" className="PanelTitle">
+                Resources
+              </Typography>
+              <List component="nav">
+                {Object.entries(resources).map(resource => (
+                  <ListItem
+                    button
+                    component={props => (
+                      <Link
+                        to={resource[1].replace('/admin/', '')} // TODO: Temp until I get the proper name
+                        key={resource[0]}
+                        {...props}
+                      />
+                    )}
+                  >
+                    <ListItemText primary={resource[0]} />
+                  </ListItem>
+                ))}
+              </List>
+            </Paper>
+          </Grid>
+        </Grid>
       )
     );
   }

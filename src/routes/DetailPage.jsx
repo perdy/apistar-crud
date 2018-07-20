@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { Icon, Grid, Button } from '@material-ui/core';
 
+import { REL_PATH } from '../api';
 import ResourceForm from '../components/ResourceForm';
 import { fetchCurrentResourceRequest } from '../ducks/resource';
 
@@ -12,6 +14,8 @@ const propTypes = {
     client: PropTypes.object,
     schema: PropTypes.string,
   }),
+  match: PropTypes.object,
+  fetchResource: PropTypes.func.isRequired,
 };
 
 class DetailPage extends React.Component {
@@ -28,7 +32,19 @@ class DetailPage extends React.Component {
     const resourceName = this.props.match.params.resource;
     const resourceId = this.props.match.params.id;
 
-    return <ResourceForm resourceName={resourceName} resourceId={resourceId} />;
+    return (
+      <Grid>
+        <Button
+          component={props => (
+            <Link to={`${REL_PATH}${resourceName}/`} {...props} />
+          )}
+        >
+          <Icon>arrow_back</Icon>
+          &nbsp;Back
+        </Button>
+        <ResourceForm resourceName={resourceName} resourceId={resourceId} />
+      </Grid>
+    );
   }
 }
 

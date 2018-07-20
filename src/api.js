@@ -1,6 +1,8 @@
 import request from 'superagent';
 import Swagger from 'swagger-client';
 
+export const REL_PATH = '/admin/';
+
 const urls = {
   host: 'http://localhost:8000',
   metadata: '/admin/metadata/',
@@ -13,8 +15,11 @@ export default class Api {
       .then(response => response.body);
   }
 
-  static fetchResource(resource, client) {
-    return client.apis[resource].list().then(response => response.body);
+  static fetchResource(payload, client) {
+    const { resourceName, query } = payload;
+    return client.apis[resourceName]
+      .list(query)
+      .then(response => response.body);
   }
 
   static fetchResourceElement(payload, client) {
@@ -32,7 +37,10 @@ export default class Api {
   static submitResource(payload, client) {
     return client.apis[payload.resourceName]
       .create({}, { requestBody: payload.resourceData })
-      .then(response => response.body);
+      .then(response => response.body)
+      .catch(error => {
+        throw Error(JSON.stringify(error.response.body));
+      });
   }
 
   static updateResourceElement(payload, client) {

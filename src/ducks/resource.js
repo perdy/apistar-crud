@@ -39,6 +39,7 @@ export const fetchCurrentResourceSuccess = createAction(
 
 export const submitResourceRequest = createAction(SUBMIT_RESOURCE_REQUEST);
 export const submitResourceSuccess = createAction(SUBMIT_RESOURCE_SUCCESS);
+export const submitResourceFailure = createAction(SUBMIT_RESOURCE_FAILURE);
 export const updateResourceElementRequest = createAction(
   UPDATE_RESOURCE_ELEMENT_REQUEST
 );
@@ -55,14 +56,19 @@ export const setCurrentResourceElement = createAction(
 const initialState = {
   entities: null,
   currentResourceElement: null,
+  rowsPerPage: null,
+  currentPage: null,
+  errors: null,
 };
 
 export default handleActions(
   {
     [FETCH_RESOURCE_ENTITIES_SUCCESS]: (state, { payload }) => ({
       ...state,
-      entities: payload,
+      entities: payload.resources,
       currentResourceElement: null,
+      rowsPerPage: payload.query ? payload.query.page_size : state.rowsPerPage,
+      currentPage: payload.query ? payload.query.page : state.currentPage,
     }),
     [FETCH_CURRENT_RESOURCE_SUCCESS]: (state, { payload }) => ({
       ...state,
@@ -71,6 +77,10 @@ export default handleActions(
     [SUBMIT_RESOURCE_SUCCESS]: (state, { payload }) => ({
       ...state,
       entities: [...state.entities, payload],
+    }),
+    [SUBMIT_RESOURCE_FAILURE]: (state, { payload }) => ({
+      ...state,
+      errors: payload,
     }),
     [SET_CURRENT_RESOURCE_ELEMENT]: (state, { payload }) => ({
       ...state,
