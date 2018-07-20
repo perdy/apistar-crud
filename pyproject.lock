@@ -80,6 +80,15 @@ platform = "UNKNOWN"
 [package.requirements]
 platform = "darwin"
 [[package]]
+name = "apsw"
+version = "3.9.2-r1"
+description = "Another Python SQLite Wrapper"
+category = "dev"
+optional = false
+python-versions = "*"
+platform = "UNKNOWN"
+
+[[package]]
 name = "atomicwrites"
 version = "1.1.5"
 description = "Atomic file writes."
@@ -619,7 +628,7 @@ platform = "*"
 [metadata]
 python-versions = "^3.6"
 platform = "*"
-content-hash = "bb439744d17e9834a672881bd4de2b80ab2dfbff98c6f819c2523b206587d63e"
+content-hash = "46601d1b9c8f7c21fb6a4772708f0d661c8f13f54c303f1be3f3fc76b1147f8f"
 
 [extras]
 sqlalchemy = []
@@ -633,6 +642,7 @@ apistar-pagination = [ "fed0128a8b1945eab3d068f791eaeed41db2d86b4f109b16271b1438
 apistar-peewee-orm = [ "25f804cf4f4dbd0d1fe5c5b74e2f8ceb128e3b7010107e0886dc74bd059f2ab2", "b781bda5425a331d15961d26f7b5e91ad0b5ef880f647fe5eb503b1067a7fd2e",]
 apistar-sqlalchemy = [ "d220a76363526aa89766ee2de196d95d84946db71ccf23e87186934800107f18", "df2af9e58a9a2960e0f90506466fd04c60cedff13bf68c625002399302488288",]
 appnope = [ "5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0", "8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71",]
+apsw = [ "dab96fd164dde9e59f7f27228291498217fa0e74048e2c08c7059d7e39589270",]
 atomicwrites = [ "a24da68318b08ac9c9c45029f4a10371ab5b20e4226738e150e6e7c571630ae6", "240831ea22da9ab882b551b31d4225591e5e447a68c5e188db5b89ca1d487585",]
 attrs = [ "4b90b09eeeb9b88c35bc642cbac057e45a5fd85367b985bd2809c62b7b939265", "e0d0eb91441a3b53dab4d9b743eafc1ac44476296a2053b6ca3af0b139faf87b",]
 backcall = [ "38ecd85be2c1e78f77fd91700c76e14667dc21e2713b63876c0eb901196e01e4", "bbbf4b1e5cd2bdb08f915895b51081c041bac22394fdfcfdfbe9f14b77c08bf2",]

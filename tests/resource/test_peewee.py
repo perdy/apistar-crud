@@ -79,7 +79,7 @@ class TestCasePeeweeCRUD:
         # List all the existing records
         response = client.get("/puppy/")
         assert response.status_code == 200
-        assert response.json() == [created_puppy]
+        assert response.json()["data"] == [created_puppy]
 
     def test_retrieve(self, client, puppy):
         # Successfully create a new record
@@ -114,7 +114,7 @@ class TestCasePeeweeCRUD:
         # List all the existing records
         response = client.get("/puppy/")
         assert response.status_code == 200
-        assert response.json() == [updated_puppy]
+        assert response.json()["data"] == [updated_puppy]
 
     def test_update_not_found(self, client, puppy):
         # Retrieve wrong record
@@ -162,7 +162,7 @@ class TestCasePeeweeCRUD:
         # List all the existing records
         response = client.get("/puppy/")
         assert response.status_code == 200
-        assert response.json() == [created_puppy, created_second_puppy]
+        assert response.json()["data"] == [created_puppy, created_second_puppy]
 
     def test_list_filter(self, client, puppy, another_puppy):
         # Successfully create a new record
@@ -180,7 +180,7 @@ class TestCasePeeweeCRUD:
         # List all the existing records
         response = client.get("/puppy/", params={"name": "canna"})
         assert response.status_code == 200
-        assert response.json() == [created_puppy]
+        assert response.json()["data"] == [created_puppy]
 
     def test_drop(self, client, puppy):
         # Successfully create a new record
@@ -192,7 +192,7 @@ class TestCasePeeweeCRUD:
         # List all the existing records
         response = client.get("/puppy/")
         assert response.status_code == 200
-        assert response.json() == [created_puppy]
+        assert response.json()["data"] == [created_puppy]
 
         # Drop collection
         response = client.delete("/puppy/", json=[puppy])
@@ -202,4 +202,4 @@ class TestCasePeeweeCRUD:
         # List all the existing records
         response = client.get("/puppy/")
         assert response.status_code == 200
-        assert response.json() == []
+        assert response.json()["data"] == []
