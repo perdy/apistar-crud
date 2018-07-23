@@ -61,12 +61,12 @@ class TestCaseAdmin:
         assert response.schema == app.reverse_url("serve_schema")
 
     def test_routes(self, admin):
-        assert admin.routes[0].url == "/"
+        assert admin.routes[0].url == "/metadata/"
         assert admin.routes[0].method == "GET"
-        assert admin.routes[0].handler == admin.main
+        assert admin.routes[0].handler == admin.metadata
         assert admin.routes[0].documented is False
 
-        assert admin.routes[1].url == "/metadata/"
+        assert admin.routes[1].url == "/{+path}"
         assert admin.routes[1].method == "GET"
-        assert admin.routes[1].handler == admin.metadata
+        assert admin.routes[1].handler == admin.main
         assert admin.routes[1].documented is False
