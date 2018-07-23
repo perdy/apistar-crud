@@ -9,17 +9,15 @@ import { REL_PATH } from '../../api';
 class Header extends React.Component {
   render() {
     return (
-      <div>
-        <AppBar position="static">
-          <Toolbar>
-            <Typography variant="title" color="inherit">
-              <Link to={REL_PATH} className="HeaderLink">
-                APISTAR UI
-              </Link>
-            </Typography>
-          </Toolbar>
-        </AppBar>
-      </div>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="title" color="inherit">
+            <Link to={REL_PATH} className="HeaderLink">
+              APISTAR UI
+            </Link>
+          </Typography>
+        </Toolbar>
+      </AppBar>
     );
   }
 }

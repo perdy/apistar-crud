@@ -21,7 +21,6 @@ const muiTheme = createMuiTheme({
   palette: {
     primary: { main: '#31CACC', contrastText: '#fff' },
   },
-  tabs: {},
 });
 
 export const history = createHistory();

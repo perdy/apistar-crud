@@ -33,7 +33,7 @@ class DetailPage extends React.Component {
     const resourceId = this.props.match.params.id;
 
     return (
-      <Grid>
+      <Grid container className="MainContainer">
         <Button
           component={props => (
             <Link to={`${REL_PATH}${resourceName}/`} {...props} />

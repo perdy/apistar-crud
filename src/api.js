@@ -12,7 +12,10 @@ export default class Api {
   static fetchMetadata() {
     return request
       .get(urls.host + urls.metadata)
-      .then(response => response.body);
+      .then(response => response.body)
+      .catch(error => {
+        throw Error(error.message);
+      });
   }
 
   static fetchResource(payload, client) {

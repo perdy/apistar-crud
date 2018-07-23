@@ -14,6 +14,7 @@ import {
   Typography,
   Icon,
   CircularProgress,
+  Grid,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
@@ -65,71 +66,77 @@ class ListPage extends React.Component {
       ].schema;
     return (
       resourceSchema && (
-        <Paper square>
-          <div>
-            <Typography variant="title" className="TableTitle PanelTitle">
-              {this.props.match.params.resource}
-            </Typography>
+        <Grid container>
+          <Grid item>
+            <Paper square>
+              <Typography variant="title" className="TableTitle PanelTitle">
+                {this.props.match.params.resource}
+              </Typography>
 
-            <Button
-              component={props => <Link to="new" {...props} />}
-              variant="contained"
-              color="primary"
-              className="ButtonNew"
-            >
-              Create New
-            </Button>
-            {this.props.resources ? (
-              <Fragment>
-                <div className="TableContainer">
-                  <Table className="TableContainer">
-                    <TableHead>
-                      <TableRow>
-                        <TableCell key="edit">Edit</TableCell>
-                        {Object.values(resourceSchema.properties).map(field => (
-                          <TableCell key={field.title}>
-                            {field.description}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {this.props.resources.map(item => (
-                        <TableRow key={item.id}>
-                          <TableCell>
-                            <Link to={`${REL_PATH}${resource}/${item.id}`}>
-                              <Icon>edit</Icon>
-                            </Link>
-                          </TableCell>
+              <Button
+                component={props => <Link to="new" {...props} />}
+                variant="contained"
+                color="primary"
+                className="ButtonNew"
+              >
+                Create New
+              </Button>
+              {this.props.resources ? (
+                <Fragment>
+                  <div className="TableContainer">
+                    <Table className="TableContainer">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell key="edit">Edit</TableCell>
                           {Object.values(resourceSchema.properties).map(
-                            field => <TableCell>{item[field.title]}</TableCell>
+                            field => (
+                              <TableCell key={field.title}>
+                                {field.description}
+                              </TableCell>
+                            )
                           )}
                         </TableRow>
-                      ))}
-                    </TableBody>
-                    <TableFooter>
-                      <TableRow />
-                    </TableFooter>
-                  </Table>
+                      </TableHead>
+                      <TableBody>
+                        {this.props.resources.map(item => (
+                          <TableRow key={item.id}>
+                            <TableCell>
+                              <Link to={`${REL_PATH}${resource}/${item.id}`}>
+                                <Icon>edit</Icon>
+                              </Link>
+                            </TableCell>
+                            {Object.values(resourceSchema.properties).map(
+                              field => (
+                                <TableCell>{item[field.title]}</TableCell>
+                              )
+                            )}
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                      <TableFooter>
+                        <TableRow />
+                      </TableFooter>
+                    </Table>
+                  </div>
+                  <TablePagination
+                    colSpan={3}
+                    component="div"
+                    count={this.props.resources.length}
+                    rowsPerPage={this.props.rowsPerPage}
+                    page={this.props.currentPage - 1}
+                    onChangePage={this.handleChangePage}
+                    onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </Fragment>
+              ) : (
+                <div className="SpinnerContainer">
+                  <CircularProgress />
                 </div>
-                <TablePagination
-                  colSpan={3}
-                  component="div"
-                  count={this.props.resources.length}
-                  rowsPerPage={this.props.rowsPerPage}
-                  page={this.props.currentPage - 1}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
-              </Fragment>
-            ) : (
-              <div className="SpinnerContainer">
-                <CircularProgress />
-              </div>
-            )}
-          </div>
-        </Paper>
+              )}
+            </Paper>
+          </Grid>
+        </Grid>
       )
     );
   }

@@ -6,6 +6,7 @@ export const FETCH_METADATA_FAILURE = 'metadata/fetch/FAILURE';
 
 export const fetchMetadataRequest = createAction(FETCH_METADATA_REQUEST);
 export const fetchMetadataSuccess = createAction(FETCH_METADATA_SUCCESS);
+export const fetchMetadataFailure = createAction(FETCH_METADATA_FAILURE);
 
 const initialState = {
   resources: null,
@@ -20,6 +21,10 @@ export default handleActions(
       resources: payload.resources,
       schema: payload.schema,
       client: payload.client,
+    }),
+    [FETCH_METADATA_FAILURE]: (state, { payload }) => ({
+      ...state,
+      error: payload,
     }),
   },
   initialState

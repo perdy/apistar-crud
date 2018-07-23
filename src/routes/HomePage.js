@@ -25,7 +25,7 @@ class HomePage extends React.Component {
     const { resources } = this.props.metadata;
     return (
       resources && (
-        <Grid container alignItems="center">
+        <Grid container alignItems="center" className="MainContainer">
           <Grid item xs={12} sm={6}>
             <Paper square>
               <Typography variant="title" className="PanelTitle">
