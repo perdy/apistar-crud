@@ -22,7 +22,10 @@ export default class Api {
     const { resourceName, query } = payload;
     return client.apis[resourceName]
       .list(query)
-      .then(response => response.body);
+      .then(response => response.body)
+      .catch(error => {
+        throw Error(error.message);
+      });
   }
 
   static fetchResourceElement(payload, client) {
@@ -30,7 +33,10 @@ export default class Api {
     const id = payload.resourceId;
     return client.apis[resource]
       .retrieve({ element_id: id })
-      .then(response => response.body);
+      .then(response => response.body)
+      .catch(error => {
+        throw Error(error.message);
+      });
   }
 
   static fetchSwaggerSchema(schemaUrl) {
@@ -51,5 +57,15 @@ export default class Api {
     return client.apis[resourceName]
       .update({ element_id: resourceId }, { requestBody: resourceData })
       .then(response => response.body);
+  }
+
+  static deleteResourceElement(payload, client) {
+    const { resourceName, resourceId } = payload;
+    return client.apis[resourceName]
+      .delete({ element_id: resourceId })
+      .then(response => response.body)
+      .catch(error => {
+        throw Error(error.message);
+      });
   }
 }

@@ -61,6 +61,14 @@ body {
   float: right;
 }
 
+.ButtonDelete {
+  margin-top: 20px !important; 
+}
+
+.ButtonBack {
+  padding-left: 0 !important;
+}
+
 .ResourceFormContainer {
   padding: 15px 25px;
 }
@@ -72,4 +80,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.TablePagination {
+  overflow: auto;
 }

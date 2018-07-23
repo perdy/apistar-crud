@@ -5,6 +5,8 @@ import Header from '../components/Header';
 import HomePage from './HomePage';
 import ListPage from './ListPage';
 import DetailPage from './DetailPage';
+import ErrorPage from './ErrorPage';
+
 import { REL_PATH } from '../api';
 
 import { history } from '../index.js';
@@ -22,6 +24,8 @@ export default class Routes extends Component {
               path={`${REL_PATH}:resource/:id`}
               component={DetailPage}
             />
+            <Route path="/not-found" component={ErrorPage} />
+            <Route component={ErrorPage} />
           </Switch>
         </div>
       </ConnectedRouter>

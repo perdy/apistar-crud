@@ -34,15 +34,18 @@ class DetailPage extends React.Component {
 
     return (
       <Grid container className="MainContainer">
-        <Button
-          component={props => (
-            <Link to={`${REL_PATH}${resourceName}/`} {...props} />
-          )}
-        >
-          <Icon>arrow_back</Icon>
-          &nbsp;Back
-        </Button>
-        <ResourceForm resourceName={resourceName} resourceId={resourceId} />
+        <Grid item xs={12}>
+          <Button
+            className="ButtonBack"
+            component={props => (
+              <Link to={`${REL_PATH}${resourceName}/`} {...props} />
+            )}
+          >
+            <Icon>arrow_back</Icon>
+            &nbsp;Back
+          </Button>
+          <ResourceForm resourceName={resourceName} resourceId={resourceId} />
+        </Grid>
       </Grid>
     );
   }

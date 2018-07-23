@@ -14,6 +14,15 @@ const propTypes = {
 };
 
 class TablePaginationActions extends React.Component {
+  constructor() {
+    super();
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    this.handleFirstPageButtonClick = this.handleFirstPageButtonClick.bind(
+      this
+    );
+    this.handleNextButtonClick = this.handleNextButtonClick.bind(this);
+    this.handleLastPageButtonClick = this.handleLastPageButtonClick.bind(this);
+  }
   handleFirstPageButtonClick(event) {
     this.props.onChangePage(event, 0);
   }
