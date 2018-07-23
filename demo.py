@@ -41,7 +41,7 @@ resource_routes.register(PuppyResource, "/puppy")
 components = [PeeweeDatabaseComponent(url="sqlite:///demo.db")]
 event_hooks = [PeeweeTransactionHook]
 
-app = App(routes=resource_routes.routes(), components=components, event_hooks=event_hooks)
+app = App(routes=resource_routes.routes(), components=components, event_hooks=event_hooks, packages=("apistar_crud",))
 
 
 if __name__ == "__main__":
