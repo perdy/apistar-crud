@@ -33,6 +33,7 @@ class Admin:
     @property
     def routes(self) -> typing.List[Route]:
         return [
+            Route("/", "GET", self.main, name="main", documented=False),
             Route("/metadata/", "GET", self.metadata, name="metadata", documented=False),
-            Route("/{+path}", "GET", self.main, name="main", documented=False),
+            Route("/{+path}", "GET", self.main, name="main-path", documented=False),
         ]
