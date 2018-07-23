@@ -34,13 +34,10 @@ class HomePage extends React.Component {
               <List component="nav">
                 {Object.entries(resources).map(resource => (
                   <ListItem
+                    key={resource[0]}
                     button
                     component={props => (
-                      <Link
-                        to={resource[1].replace('/admin/', '')} // TODO: Temp until I get the proper name
-                        key={resource[0]}
-                        {...props}
-                      />
+                      <Link to={`${resource[1]}/`} {...props} />
                     )}
                   >
                     <ListItemText primary={resource[0]} />

@@ -13,7 +13,7 @@ class Header extends React.Component {
         <Toolbar>
           <Typography variant="title" color="inherit">
             <Link to={REL_PATH} className="HeaderLink">
-              APISTAR UI
+              APISTAR
             </Link>
           </Typography>
         </Toolbar>

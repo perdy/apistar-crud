@@ -24,6 +24,8 @@ export const UPDATE_RESOURCE_ELEMENT_FAILURE = 'resource/update/FAILURE';
 
 export const SET_CURRENT_RESOURCE_ELEMENT = 'resource/current-resource/SET';
 
+export const DELETE_RESOURCE_ELEMENT_REQUEST = 'resource/delete/REQUEST';
+
 export const fetchResourceEntitiesRequest = createAction(
   FETCH_RESOURCE_ENTITIES_REQUEST
 );
@@ -53,10 +55,15 @@ export const setCurrentResourceElement = createAction(
   SET_CURRENT_RESOURCE_ELEMENT
 );
 
+export const deleteResourceElementRequest = createAction(
+  DELETE_RESOURCE_ELEMENT_REQUEST
+);
+
 const initialState = {
   entities: null,
   currentResourceElement: null,
   rowsPerPage: null,
+  totalCount: null,
   currentPage: null,
   errors: null,
 };
@@ -65,10 +72,11 @@ export default handleActions(
   {
     [FETCH_RESOURCE_ENTITIES_SUCCESS]: (state, { payload }) => ({
       ...state,
-      entities: payload.resources,
+      entities: payload.resources.data,
       currentResourceElement: null,
-      rowsPerPage: payload.query ? payload.query.page_size : state.rowsPerPage,
-      currentPage: payload.query ? payload.query.page : state.currentPage,
+      rowsPerPage: payload.resources.meta.page_size,
+      currentPage: payload.resources.meta.page,
+      totalCount: payload.resources.meta.count,
     }),
     [FETCH_CURRENT_RESOURCE_SUCCESS]: (state, { payload }) => ({
       ...state,

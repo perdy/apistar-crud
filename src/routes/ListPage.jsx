@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { findKey } from 'lodash';
 import {
   Paper,
   Table,
@@ -21,6 +22,7 @@ import { Link } from 'react-router-dom';
 import { REL_PATH } from '../api';
 import TablePaginationActions from '../components/TablePaginationActions';
 import { fetchResourceEntitiesRequest } from '../ducks/resource';
+
 const propTypes = {
   match: PropTypes.object,
   fetchResources: PropTypes.func,
@@ -48,13 +50,16 @@ class ListPage extends React.Component {
   }
 
   handleChangePage(evt, page) {
-    this.props.fetchResources({
-      resourceName: this.props.match.params.resource,
-      query: {
-        page: page,
-        page_size: DEFAULT_PAGE_SIZE,
-      },
-    });
+    // Mui has some weird default pagination behaviour on cDU
+    if (evt) {
+      this.props.fetchResources({
+        resourceName: this.props.match.params.resource,
+        query: {
+          page: page + 1, // TablePagination starts at 0;
+          page_size: DEFAULT_PAGE_SIZE,
+        },
+      });
+    }
   }
 
   render() {
@@ -66,11 +71,14 @@ class ListPage extends React.Component {
       ].schema;
     return (
       resourceSchema && (
-        <Grid container>
-          <Grid item>
+        <Grid container spacing={8} className="MainContainer">
+          <Grid item xs={12}>
             <Paper square>
               <Typography variant="title" className="TableTitle PanelTitle">
-                {this.props.match.params.resource}
+                {findKey(
+                  this.props.resourceList,
+                  resource => resource === resource
+                )}
               </Typography>
 
               <Button
@@ -107,7 +115,9 @@ class ListPage extends React.Component {
                             </TableCell>
                             {Object.values(resourceSchema.properties).map(
                               field => (
-                                <TableCell>{item[field.title]}</TableCell>
+                                <TableCell key={field.title}>
+                                  {item[field.title]}
+                                </TableCell>
                               )
                             )}
                           </TableRow>
@@ -121,12 +131,14 @@ class ListPage extends React.Component {
                   <TablePagination
                     colSpan={3}
                     component="div"
-                    count={this.props.resources.length}
+                    className="TablePagination"
+                    count={this.props.totalCount}
                     rowsPerPage={this.props.rowsPerPage}
                     page={this.props.currentPage - 1}
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
                     ActionsComponent={TablePaginationActions}
+                    rowsPerPageOptions={[0]}
                   />
                 </Fragment>
               ) : (
@@ -147,8 +159,10 @@ ListPage.propTypes = propTypes;
 const mapStateToProps = state => ({
   rowsPerPage: state.resource.rowsPerPage,
   currentPage: state.resource.currentPage,
+  totalCount: state.resource.totalCount,
   resources: state.resource.entities,
   schema: state.metadata.client,
+  resourceList: state.metadata.resources,
 });
 
 const mapDispatchToProps = {
