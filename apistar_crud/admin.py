@@ -24,10 +24,8 @@ class Admin:
         """
         return Metadata(
             {
-                "resources": {
-                    resource.verbose_name: app.reverse_url("admin:list", resource_name=resource.name)
-                    for resource in self.resources.values()
-                },
+                "resources": {resource.verbose_name: resource.name for resource in self.resources.values()},
+                "admin": app.reverse_url("admin:main"),
                 "schema": app.reverse_url("serve_schema"),
             }
         )
