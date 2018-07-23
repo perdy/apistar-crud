@@ -70,3 +70,8 @@ class TestCaseAdmin:
         assert admin.routes[1].method == "GET"
         assert admin.routes[1].handler == admin.metadata
         assert admin.routes[1].documented is False
+
+        assert admin.routes[2].url == "/{+path}"
+        assert admin.routes[2].method == "GET"
+        assert admin.routes[2].handler == admin.main
+        assert admin.routes[2].documented is False

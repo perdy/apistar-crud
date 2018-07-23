@@ -12,7 +12,7 @@ class Admin:
     def __init__(self, *resources):
         self.resources = {resource.name: resource for resource in resources}
 
-    def main(self, app: App):
+    def main(self, app: App, path: str = ""):
         """
         Admin main page presenting a list of resources.
         """
@@ -24,10 +24,8 @@ class Admin:
         """
         return Metadata(
             {
-                "resources": {
-                    resource.verbose_name: app.reverse_url("admin:list", resource_name=resource.name)
-                    for resource in self.resources.values()
-                },
+                "resources": {resource.verbose_name: resource.name for resource in self.resources.values()},
+                "admin": app.reverse_url("admin:main"),
                 "schema": app.reverse_url("serve_schema"),
             }
         )
@@ -37,4 +35,5 @@ class Admin:
         return [
             Route("/", "GET", self.main, name="main", documented=False),
             Route("/metadata/", "GET", self.metadata, name="metadata", documented=False),
+            Route("/{+path}", "GET", self.main, name="main-path", documented=False),
         ]
