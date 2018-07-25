@@ -1,4 +1,7 @@
 # Changes
+v0.5.1 - 2018-07-25
+ * Minor fixes.
+
 v0.5.0 - 2018-07-17
  * Admin site for handling resources.
  * Routing handler that allows register resources and generates resource and admin routes.

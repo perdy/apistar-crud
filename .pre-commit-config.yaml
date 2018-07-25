@@ -13,6 +13,7 @@
         args:
         - --autofix
         - --indent=2
+        exclude: ^package-lock.json$
 -   repo: local
     hooks:
     -   id: flake8
