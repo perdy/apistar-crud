@@ -16,7 +16,7 @@ class Admin:
         """
         Admin main page presenting a list of resources.
         """
-        return app.render_template("apistar_crud/admin_main.html")
+        return app.render_template("apistar_crud/admin.html")
 
     def metadata(self, app: App) -> Metadata:
         """

@@ -48,7 +48,7 @@ class TestCaseAdmin:
         assert admin.resources == {"puppy": PuppyResource}
 
     def test_main(self, admin, app):
-        expected_calls = [call("apistar_crud/admin_main.html")]
+        expected_calls = [call("apistar_crud/admin.html")]
 
         admin.main(app)
 
