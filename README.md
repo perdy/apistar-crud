@@ -24,6 +24,9 @@ API Star CRUD supports the following ORM:
 * [SQLAlchemy](https://www.sqlalchemy.org/) through [apistar-sqlalchemy](https://github.com/PeRDy/apistar-sqlalchemy).
 * [Peewee](https://github.com/coleifer/peewee) through [apistar-peewee-orm](https://github.com/PeRDy/apistar-peewee-orm).
 
+### Admin site
+API Star CRUD serves an admin site to handle resources in a graphical way, by default this site is routed to `/admin/`. 
+
 ## Quick start
 Install API Star CRUD:
 
@@ -42,7 +45,7 @@ Follow the steps:
 1. Create an **input type** and **output type** for your resource:
 2. Define a **model** based on your ORM.
 3. Build your **resource** using the metaclass specific for your ORM.
-4. Add the **routes** for your resource.
+4. Add the **routes** for your resources.
 
 ## Usage
 ### SQLAlchemy
@@ -75,6 +78,9 @@ The **resource**:
 from apistar_crud.sqlalchemy import Resource
 
 class PuppyResource(metaclass=Resource):
+    name = "puppy"
+    verbose_name = "Puppy"
+    
     model = PuppyModel
     input_type = PuppyInputType
     output_type = PuppyOutputType
@@ -84,11 +90,18 @@ class PuppyResource(metaclass=Resource):
 The resource generates his own **routes**:
 
 ```python
-from apistar import Include
+from apistar import App
+from apistar_crud.routes import routes as resource_routes
+
+resource_routes.register(PuppyResource, "/puppy/", admin=True)
 
 routes = [
-    Include("/puppy", "Puppy", PuppyResource.routes),
+    # ... your app routes
 ]
+
+routes += resource_routes.routes(admin="/admin/")
+packages = ("apistar", "apistar_crud")
+app = App(routes=routes, packages=packages)
 ```
 
 ### Peewee
@@ -118,6 +131,9 @@ The **resource**:
 from apistar_crud.peewee import Resource
 
 class PuppyResource(metaclass=Resource):
+    name = "puppy"
+    verbose_name = "Puppy"
+    
     model = PuppyModel
     input_type = PuppyInputType
     output_type = PuppyOutputType
@@ -127,11 +143,18 @@ class PuppyResource(metaclass=Resource):
 The resource generates his own **routes**:
 
 ```python
-from apistar import Include
+from apistar import App
+from apistar_crud.routes import routes as resource_routes
+
+resource_routes.register(PuppyResource, "/puppy/", admin=True)
 
 routes = [
-    Include("/puppy", "Puppy", PuppyResource.routes),
+    # ... your app routes
 ]
+
+routes += resource_routes.routes(admin="/admin/")
+packages = ("apistar", "apistar_crud")
+app = App(routes=routes, packages=packages)
 ```
 
 ## Resources
@@ -156,6 +179,9 @@ To customize CRUD methods you can override them like:
 from apistar_crud.peewee import Resource
 
 class PuppyResource(metaclass=Resource):
+    name = "puppy"
+    verbose_name = "Puppy"
+    
     model = PuppyModel
     input_type = PuppyInputType
     output_type = PuppyOutputType
@@ -177,12 +203,15 @@ so in case of SQLAlchemy it uses a `filter_by()` method and a `where()` in Peewe
 from apistar_crud.peewee import Resource
 
 class PuppyResource(metaclass=Resource):
+    name = "puppy"
+    verbose_name = "Puppy"
+    
     model = PuppyModel
     input_type = PuppyInputType
     output_type = PuppyOutputType
     methods = ("create", "retrieve", "update", "delete", "list", "drop")
     
     @classmethod
-    def list(cls, name: http.QueryParam) -> typing.List[PuppyOutputType]:
+    def list(cls, name: http.QueryParam, page: http.QueryParam=None, page_size: http.QueryParam=None) -> typing.List[PuppyOutputType]:
         return cls._list(name=name)
 ```

@@ -1,4 +1,9 @@
 # Changes
+v0.5.0 - 2018-07-17
+ * Admin site for handling resources.
+ * Routing handler that allows register resources and generates resource and admin routes.
+ * List method uses page-number pagination.
+
 v0.4.0 - 2018-07-03
  * List method now can filter.
 

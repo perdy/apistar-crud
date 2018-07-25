@@ -8,7 +8,7 @@ from apistar_sqlalchemy.event_hooks import SQLAlchemyTransactionHook
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import Session
 
-from apistar_crud.sqlalchemy import Resource
+from apistar_crud.resource.sqlalchemy import Resource
 
 
 class PuppyModel(database.Base):
@@ -27,6 +27,9 @@ class PuppyOutputType(types.Type):
 
 
 class PuppyResource(metaclass=Resource):
+    name = "puppy"
+    verbose_name = "Puppy"
+
     model = PuppyModel
     input_type = PuppyInputType
     output_type = PuppyOutputType
@@ -34,7 +37,7 @@ class PuppyResource(metaclass=Resource):
 
     @classmethod
     def list(cls, session: Session, name: http.QueryParam) -> typing.List[PuppyOutputType]:
-        return cls._list(session, name=name)
+        return cls._list(session=session, name=name)
 
 
 routes = [Include("/puppy", "puppy", PuppyResource.routes)]
@@ -72,7 +75,7 @@ class TestCaseSQLAlchemyCRUD:
         # List all the existing records
         response = client.get("/puppy/")
         assert response.status_code == 200
-        assert response.json() == [created_puppy]
+        assert response.json()["data"] == [created_puppy]
 
     def test_retrieve(self, client, puppy):
         # Successfully create a new record
@@ -107,7 +110,7 @@ class TestCaseSQLAlchemyCRUD:
         # List all the existing records
         response = client.get("/puppy/")
         assert response.status_code == 200
-        assert response.json() == [updated_puppy]
+        assert response.json()["data"] == [updated_puppy]
 
     def test_update_not_found(self, client, puppy):
         # Retrieve wrong record
@@ -155,7 +158,7 @@ class TestCaseSQLAlchemyCRUD:
         # List all the existing records
         response = client.get("/puppy/")
         assert response.status_code == 200
-        assert response.json() == [created_puppy, created_second_puppy]
+        assert response.json()["data"] == [created_puppy, created_second_puppy]
 
     def test_list_filter(self, client, puppy, another_puppy):
         # Successfully create a new record
@@ -173,7 +176,7 @@ class TestCaseSQLAlchemyCRUD:
         # List all the existing records
         response = client.get("/puppy/", params={"name": "canna"})
         assert response.status_code == 200
-        assert response.json() == [created_puppy]
+        assert response.json()["data"] == [created_puppy]
 
     def test_drop(self, client, puppy):
         # Successfully create a new record
@@ -185,7 +188,7 @@ class TestCaseSQLAlchemyCRUD:
         # List all the existing records
         response = client.get("/puppy/")
         assert response.status_code == 200
-        assert response.json() == [created_puppy]
+        assert response.json()["data"] == [created_puppy]
 
         # Drop collection
         response = client.delete("/puppy/", json=[puppy])
@@ -195,4 +198,4 @@ class TestCaseSQLAlchemyCRUD:
         # List all the existing records
         response = client.get("/puppy/")
         assert response.status_code == 200
-        assert response.json() == []
+        assert response.json()["data"] == []

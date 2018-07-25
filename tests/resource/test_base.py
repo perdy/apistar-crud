@@ -1,7 +1,7 @@
 import pytest
 from apistar import types, validators
 
-from apistar_crud.sqlalchemy import Resource
+from apistar_crud.resource.sqlalchemy import Resource
 
 
 class PuppyModel:
@@ -24,6 +24,9 @@ class TestCaseBaseCRUDResource:
         if hasattr(request, "param"):
 
             class PuppyResource(metaclass=Resource):
+                name = "puppy"
+                verbose_name = "Puppy"
+
                 model = PuppyModel
                 input_type = PuppyInputType
                 output_type = PuppyOutputType
@@ -32,6 +35,9 @@ class TestCaseBaseCRUDResource:
         else:
 
             class PuppyResource(metaclass=Resource):
+                name = "puppy"
+                verbose_name = "Puppy"
+
                 model = PuppyModel
                 input_type = PuppyInputType
                 output_type = PuppyOutputType
@@ -92,6 +98,23 @@ class TestCaseBaseCRUDResource:
         with pytest.raises(AttributeError):
 
             class PuppyResource(metaclass=Resource):
+                input_type = PuppyInputType
+                output_type = PuppyOutputType
+
+    def test_new_no_name(self):
+        class PuppyResource(metaclass=Resource):
+            model = PuppyModel
+            input_type = PuppyInputType
+            output_type = PuppyOutputType
+
+        assert PuppyResource.name == "puppyresource"
+
+    def test_new_wrong_name(self):
+        with pytest.raises(AttributeError):
+
+            class PuppyResource(metaclass=Resource):
+                name = "123foo"
+                model = PuppyModel
                 input_type = PuppyInputType
                 output_type = PuppyOutputType
 

@@ -24,6 +24,7 @@ var/
 .installed.cfg
 *.egg
 *dist/
+apistar_crud/static/
 
 # Installer logs
 pip-log.txt
@@ -44,3 +45,9 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+
+node_modules
+*.vscode
+
+## Demo
+demo.db

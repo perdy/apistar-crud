@@ -1,34 +1,36 @@
+import operator
 import typing
+from functools import reduce
 
 from apistar import http, types, validators
 from apistar.exceptions import NotFound
-from sqlalchemy.orm import Session
+from peewee import DoesNotExist
 
-from apistar_crud.base import BaseResource
+from apistar_crud.resource.base import BaseResource
+from apistar_pagination import PageNumberResponse
 
 
 class Resource(BaseResource):
     @classmethod
     def add_create(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
-        def create(cls, session: Session, element: input_type) -> output_type:
+        def create(cls, element: input_type) -> output_type:
             """
             Create a new element for this resource.
             """
-            record = model(**element)
-            session.add(record)
-            session.flush()
+            record = model.create(**element)
             return http.JSONResponse(output_type(record), status_code=201)
 
         return {"_create": classmethod(create)}
 
     @classmethod
     def add_retrieve(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
-        def retrieve(cls, session: Session, element_id: str) -> output_type:
+        def retrieve(cls, element_id: str) -> output_type:
             """
             Retrieve an element of this resource.
             """
-            record = session.query(model).get(element_id)
-            if record is None:
+            try:
+                record = model.get_by_id(element_id)
+            except DoesNotExist:
                 raise NotFound
 
             return output_type(record)
@@ -37,16 +39,19 @@ class Resource(BaseResource):
 
     @classmethod
     def add_update(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
-        def update(cls, session: Session, element_id: str, element: input_type) -> output_type:
+        def update(cls, element_id: str, element: input_type) -> output_type:
             """
             Update an element of this resource.
             """
-            record = session.query(model).get(element_id)
-            if record is None:
+            try:
+                record = model.get_by_id(element_id)
+            except DoesNotExist:
                 raise NotFound
 
             for k, value in element.items():
                 setattr(record, k, value)
+
+            record.save()
 
             return http.JSONResponse(output_type(record), status_code=200)
 
@@ -54,37 +59,42 @@ class Resource(BaseResource):
 
     @classmethod
     def add_delete(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
-        def delete(cls, session: Session, element_id: str) -> typing.Dict[str, typing.Any]:
+        def delete(cls, element_id: str) -> typing.Dict[str, typing.Any]:
             """
             Delete an element of this resource.
             """
-            if session.query(model).filter_by(id=element_id).count() == 0:
+            try:
+                record = model.get_by_id(element_id)
+            except DoesNotExist:
                 raise NotFound
 
-            session.query(model).filter_by(id=element_id).delete()
+            record.delete_instance()
+
             return http.JSONResponse(None, status_code=204)
 
         return {"_delete": classmethod(delete)}
 
     @classmethod
     def add_list(mcs, model, input_type, output_type) -> typing.Dict[str, typing.Any]:
-        def list_(cls, session: Session, **filters) -> typing.List[output_type]:
+        def filter_(cls, **filters) -> typing.List[output_type]:
+            """
+            Filtering over a resource collection.
+            """
+            queryset = model.select()
+
+            filters = {k: v for k, v in filters.items() if v}
+            if filters:
+                queryset = queryset.where(reduce(operator.and_, [(getattr(model, k) == v) for k, v in filters.items()]))
+
+            return [output_type(record) for record in queryset]
+
+        def list_(
+            cls, page: http.QueryParam = None, page_size: http.QueryParam = None, **filters
+        ) -> typing.List[output_type]:
             """
             List resource collection.
             """
-            return cls._filter(session, **filters)
-
-        def filter_(cls, session: Session, **filters) -> typing.List[output_type]:
-            """
-            Filter resource collection.
-            """
-            filters = {k: v for k, v in filters.items() if v}
-            if filters:
-                queryset = session.query(model).filter_by(**filters)
-            else:
-                queryset = session.query(model).all()
-
-            return [output_type(record) for record in queryset]
+            return PageNumberResponse(page=page, page_size=page_size, content=cls._filter(**filters))
 
         return {"_list": classmethod(list_), "_filter": classmethod(filter_)}
 
@@ -93,12 +103,11 @@ class Resource(BaseResource):
         class DropOutput(types.Type):
             deleted = validators.Integer(title="deleted", description="Number of deleted elements", minimum=0)
 
-        def drop(cls, session: Session) -> DropOutput:
+        def drop(cls) -> DropOutput:
             """
             Drop resource collection.
             """
-            num_records = session.query(model).count()
-            session.query(model).delete()
+            num_records = model.delete().execute()
             return http.JSONResponse(DropOutput({"deleted": num_records}), status_code=204)
 
         return {"_drop": classmethod(drop)}
