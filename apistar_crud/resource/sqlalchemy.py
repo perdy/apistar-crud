@@ -2,10 +2,10 @@ import typing
 
 from apistar import http, types, validators
 from apistar.exceptions import NotFound
+from apistar_pagination import PageNumberResponse
 from sqlalchemy.orm import Session
 
 from apistar_crud.resource.base import BaseResource
-from apistar_pagination import PageNumberResponse
 
 
 class Resource(BaseResource):
@@ -81,13 +81,11 @@ class Resource(BaseResource):
 
             return [output_type(record) for record in queryset]
 
-        def list_(
-            cls, page: http.QueryParam = None, page_size: http.QueryParam = None, **filters
-        ) -> typing.List[output_type]:
+        def list_(cls, page: http.QueryParam = None, page_size: http.QueryParam = None) -> typing.List[output_type]:
             """
             List resource collection.
             """
-            return PageNumberResponse(page=page, page_size=page_size, content=cls._filter(**filters))
+            return PageNumberResponse(page=page, page_size=page_size, content=cls._filter())  # noqa
 
         return {"_list": classmethod(list_), "_filter": classmethod(filter_)}
 

@@ -2,6 +2,7 @@ import typing
 
 import pytest
 from apistar import App, ASyncApp, Include, TestClient, http, types, validators
+from apistar_pagination import PageNumberResponse
 from apistar_sqlalchemy import database
 from apistar_sqlalchemy.components import SQLAlchemySessionComponent
 from apistar_sqlalchemy.event_hooks import SQLAlchemyTransactionHook
@@ -36,8 +37,10 @@ class PuppyResource(metaclass=Resource):
     methods = ("create", "retrieve", "update", "delete", "list", "drop")
 
     @classmethod
-    def list(cls, session: Session, name: http.QueryParam) -> typing.List[PuppyOutputType]:
-        return cls._list(session=session, name=name)
+    def list(
+        cls, session: Session, page: http.QueryParam, page_size: http.QueryParam, name: http.QueryParam
+    ) -> typing.List[PuppyOutputType]:
+        return PageNumberResponse(page=page, page_size=page_size, content=cls._filter(session=session, name=name))
 
 
 routes = [Include("/puppy", "puppy", PuppyResource.routes)]

@@ -75,7 +75,7 @@ class PuppyModel(Base):
 The **resource**:
 
 ```python
-from apistar_crud.sqlalchemy import Resource
+from apistar_crud.resource.sqlalchemy import Resource
 
 class PuppyResource(metaclass=Resource):
     name = "puppy"
@@ -128,7 +128,7 @@ class PuppyModel(peewee.Model):
 The **resource**:
 
 ```python
-from apistar_crud.peewee import Resource
+from apistar_crud.resource.peewee import Resource
 
 class PuppyResource(metaclass=Resource):
     name = "puppy"
@@ -176,7 +176,7 @@ The routes for resource methods are:
 To customize CRUD methods you can override them like:
 
 ```python
-from apistar_crud.peewee import Resource
+from apistar_crud.resource.peewee import Resource
 
 class PuppyResource(metaclass=Resource):
     name = "puppy"
@@ -200,7 +200,11 @@ It is a direct translation to ORM keyword arguments
 so in case of SQLAlchemy it uses a `filter_by()` method and a `where()` in Peewee case.
 
 ```python
-from apistar_crud.peewee import Resource
+import typing
+
+from apistar import http
+from apistar_crud.resource.peewee import Resource
+from apistar_pagination import PageNumberResponse
 
 class PuppyResource(metaclass=Resource):
     name = "puppy"
@@ -213,5 +217,5 @@ class PuppyResource(metaclass=Resource):
     
     @classmethod
     def list(cls, name: http.QueryParam, page: http.QueryParam=None, page_size: http.QueryParam=None) -> typing.List[PuppyOutputType]:
-        return cls._list(name=name)
+        return PageNumberResponse(page=page, page_size=page_size, content=cls._filter(name=name))
 ```

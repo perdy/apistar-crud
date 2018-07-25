@@ -1,4 +1,7 @@
 # Changes
+v0.5.2 - 2018-07-25
+ * Filtering is done through private filter method.
+
 v0.5.1 - 2018-07-25
  * Minor fixes.
 

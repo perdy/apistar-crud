@@ -3,6 +3,7 @@ import typing
 import peewee
 import pytest
 from apistar import App, ASyncApp, Include, TestClient, http, types, validators
+from apistar_pagination import PageNumberResponse
 from apistar_peewee_orm import PeeweeDatabaseComponent, PeeweeTransactionHook
 
 from apistar_crud.resource.peewee import Resource
@@ -36,8 +37,10 @@ class PuppyResource(metaclass=Resource):
     methods = ("create", "retrieve", "update", "delete", "list", "drop")
 
     @classmethod
-    def list(cls, name: http.QueryParam) -> typing.List[PuppyOutputType]:
-        return cls._list(name=name)
+    def list(
+        cls, page: http.QueryParam, page_size: http.QueryParam, name: http.QueryParam
+    ) -> typing.List[PuppyOutputType]:
+        return PageNumberResponse(page=page, page_size=page_size, content=cls._filter(name=name))
 
 
 routes = [Include("/puppy", "puppy", PuppyResource.routes)]
