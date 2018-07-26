@@ -4,6 +4,7 @@ from importlib.util import find_spec
 
 import peewee
 from apistar import App, http, types, validators
+from apistar_pagination import PageNumberResponse
 from apistar_peewee_orm import Model, PeeweeDatabaseComponent, PeeweeTransactionHook
 
 from apistar_crud.resource.peewee import Resource
@@ -38,7 +39,7 @@ class PuppyResource(metaclass=Resource):
 
     @classmethod
     def list(cls, name: http.QueryParam, page: http.QueryParam, page_size: http.QueryParam) -> typing.List[PuppyType]:
-        return cls._list(name=name, page=page, page_size=page_size)
+        return PageNumberResponse(content=cls._filter(name=name), page=page, page_size=page_size)
 
 
 resource_routes.register(PuppyResource, "/puppy")
