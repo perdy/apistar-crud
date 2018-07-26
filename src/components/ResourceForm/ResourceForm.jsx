@@ -35,11 +35,16 @@ const defaultProps = {};
 const typeMaps = {
   string: 'text',
   integer: 'number',
-  float: 'number', // TODO: fix
-  datetime: 'datetime', // TODO: fix
+  number: 'number',
 };
 
 class ResourceForm extends React.Component {
+  static getInputType(field) {
+    if (field.format === 'datetime') {
+      return 'datetime-local';
+    }
+    return typeMaps[field.type] || 'text';
+  }
   constructor() {
     super();
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -107,7 +112,7 @@ class ResourceForm extends React.Component {
                     ? !!errors[field[1].title]
                     : !!errors[field[0]])
                 }
-                type={typeMaps[field[1].type] || 'text'}
+                type={ResourceForm.getInputType(field[1])}
                 min={field[1].minimum}
                 max={field[1].maximum}
                 id={field[1].title || field[0]}
@@ -117,6 +122,9 @@ class ResourceForm extends React.Component {
                 onChange={this.handleInputChange}
                 margin="normal"
                 fullWidth
+                InputLabelProps={{
+                  shrink: field[1].format === 'datetime',
+                }}
                 required={requiredFields.includes(field[0])}
                 helperText={
                   (errors &&
