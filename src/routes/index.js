@@ -18,13 +18,13 @@ export default class Routes extends Component {
           <Header />
           <Switch>
             <Route exact path={REL_PATH} component={HomePage} />
+            <Route path={`${REL_PATH}not-found`} component={ErrorPage} />
             <Route exact path={`${REL_PATH}:resource`} component={ListPage} />
             <Route
               exact
               path={`${REL_PATH}:resource/:id`}
               component={DetailPage}
             />
-            <Route path="/not-found" component={ErrorPage} />
             <Route component={ErrorPage} />
           </Switch>
         </div>

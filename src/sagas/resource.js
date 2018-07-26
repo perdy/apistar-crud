@@ -28,7 +28,7 @@ function* fetchResource({ payload }) {
     const resources = yield call(Api.fetchResource, payload, client);
     yield put(fetchResourceEntitiesSuccess({ resources }));
   } catch (error) {
-    yield put(push('/not-found'));
+    yield put(push(`${REL_PATH}not-found`));
   }
 }
 
@@ -64,7 +64,7 @@ function* fetchResourceElement({ payload }) {
     const resource = yield call(Api.fetchResourceElement, payload, client);
     yield put(fetchCurrentResourceSuccess(resource));
   } catch (error) {
-    yield put(push('/not-found'));
+    yield put(push(`${REL_PATH}not-found`));
   }
 }
 

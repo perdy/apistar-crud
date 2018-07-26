@@ -85,6 +85,7 @@ export default handleActions(
     [SUBMIT_RESOURCE_SUCCESS]: (state, { payload }) => ({
       ...state,
       entities: [...state.entities, payload],
+      errors: null,
     }),
     [SUBMIT_RESOURCE_FAILURE]: (state, { payload }) => ({
       ...state,
