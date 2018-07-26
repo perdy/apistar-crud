@@ -1,4 +1,6 @@
+import os
 import typing
+from importlib.util import find_spec
 
 import peewee
 from apistar import App, http, types, validators
@@ -43,13 +45,20 @@ resource_routes.register(PuppyResource, "/puppy")
 
 components = [PeeweeDatabaseComponent(url="sqlite:///demo.db")]
 event_hooks = [PeeweeTransactionHook]
+packages = ("apistar_crud",)
 
-app = App(routes=resource_routes.routes(), components=components, event_hooks=event_hooks, packages=("apistar_crud",))
-
+app = App(routes=resource_routes.routes(), components=components, event_hooks=event_hooks, packages=packages)
 
 if __name__ == "__main__":
-
     with components[0].database:
         components[0].database.create_tables([PuppyModel])
+
+    # Patching for autorefresh
+    app.statics.whitenoise.autorefresh = True
+    for package in packages or []:
+        package_dir = os.path.dirname(find_spec(package).origin)
+        package_dir = os.path.join(package_dir, "static")
+        package_prefix = "/static/" + package
+        app.statics.whitenoise.add_files(package_dir, prefix=package_prefix)
 
     app.serve("0.0.0.0", 8000, debug=True)
