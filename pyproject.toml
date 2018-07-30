@@ -28,7 +28,6 @@ aiofiles = "^0.3.2"
 whitenoise = "^3.3"
 peewee = "^3.5"
 apistar-peewee-orm = "^0.3.0"
-apsw = "^3.9"
 
 [tool.poetry.extras]
 sqlalchemy = ["apistar-sqlalchemy"]

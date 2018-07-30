@@ -5,7 +5,8 @@ from apistar import App, Route, types, validators
 
 class Metadata(types.Type):
     resources = validators.Object(title="resources", description="Resource list")
-    schema = validators.String(title="schema", description="OpenAPI schema")
+    admin = validators.String(title="admin", description="Admin URL")
+    schema = validators.String(title="schema", description="OpenAPI schema URL")
 
 
 class Admin:
@@ -24,7 +25,15 @@ class Admin:
         """
         return Metadata(
             {
-                "resources": {resource.verbose_name: resource.name for resource in self.resources.values()},
+                "resources": {
+                    resource.name: {
+                        "name": resource.name,
+                        "verbose_name": resource.verbose_name,
+                        "columns": resource.columns,
+                        "order": resource.order,
+                    }
+                    for resource in self.resources.values()
+                },
                 "admin": app.reverse_url("admin:main"),
                 "schema": app.reverse_url("serve_schema"),
             }
@@ -34,6 +43,9 @@ class Admin:
     def routes(self) -> typing.List[Route]:
         return [
             Route("/", "GET", self.main, name="main", documented=False),
-            Route("/metadata/", "GET", self.metadata, name="metadata", documented=False),
             Route("/{+path}", "GET", self.main, name="main-path", documented=False),
         ]
+
+    @property
+    def metadata_routes(self) -> typing.List[Route]:
+        return [Route("/metadata/", "GET", self.metadata, name="metadata", documented=False)]

@@ -1,0 +1,36 @@
+{
+  "extends": [
+    "react-app",
+    "airbnb",
+    "prettier",
+    "prettier/react"
+  ],
+  "globals": {
+    "document": true,
+    "window": true
+  },
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "max-len": [
+      2,
+      {
+        "code": 120,
+        "ignoreUrls": true,
+        "tabWidth": 2
+      }
+    ],
+    "prettier/prettier": "error"
+  },
+  "settings": {
+    "import/external-module-folders": [
+      "node_modules"
+    ],
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.dev.js"
+      }
+    }
+  }
+}

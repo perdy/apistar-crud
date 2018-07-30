@@ -34,9 +34,15 @@ class Routes:
         """
         r = [Include(opts.url, r.name, r.routes) for r, opts in self.resources.items()]
 
+        private_routes = []
+
         if admin:
             a = Admin(*[r for r, opts in self.resources.items() if opts.admin])
             r.append(Include(admin, "admin", a.routes, documented=False))
+            private_routes += a.metadata_routes
+
+        if private_routes:
+            r.append(Include("/_crud", "crud", private_routes, documented=False))
 
         return r
 

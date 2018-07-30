@@ -1,4 +1,7 @@
 # Changes
+v0.6.0 - 2018-08-03
+ * Revamp admin site.
+
 v0.5.2 - 2018-07-25
  * Filtering is done through private filter method.
 

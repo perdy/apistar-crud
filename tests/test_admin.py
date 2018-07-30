@@ -57,7 +57,7 @@ class TestCaseAdmin:
     def test_metadata(self, admin, app):
         response = admin.metadata(app)
 
-        assert "Puppy" in response.resources
+        assert "puppy" in response.resources
         assert response.schema == app.reverse_url("serve_schema")
 
     def test_routes(self, admin):
@@ -66,12 +66,7 @@ class TestCaseAdmin:
         assert admin.routes[0].handler == admin.main
         assert admin.routes[0].documented is False
 
-        assert admin.routes[1].url == "/metadata/"
+        assert admin.routes[1].url == "/{+path}"
         assert admin.routes[1].method == "GET"
-        assert admin.routes[1].handler == admin.metadata
+        assert admin.routes[1].handler == admin.main
         assert admin.routes[1].documented is False
-
-        assert admin.routes[2].url == "/{+path}"
-        assert admin.routes[2].method == "GET"
-        assert admin.routes[2].handler == admin.main
-        assert admin.routes[2].documented is False

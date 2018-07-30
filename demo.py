@@ -16,29 +16,43 @@ class PuppyModel(Model):
     number = peewee.IntegerField()
     time = peewee.DateTimeField()
     float = peewee.FloatField()
+    bool = peewee.BooleanField()
     # array = peewee.IntegerField()
 
 
-class PuppyType(types.Type):
+class PuppyInputType(types.Type):
+    name = validators.String(title="name", description="Name")
+    number = validators.Integer(title="number", description="Number", default=0)
+    time = validators.DateTime(title="time", description="Time")
+    float = validators.Number(title="float", description="Float", allow_null=True)
+    bool = validators.Boolean(title="bool", description="Boolean", default=False)
+    # array = validators.Array(validators.String(), title="array", description="Array")
+
+
+class PuppyOutputType(types.Type):
+    id = validators.Number(title="id", description="ID")
     name = validators.String(title="name", description="Name")
     number = validators.Integer(title="number", description="Number")
-    time = validators.DateTime(title="time", description="Date time")
-    float = validators.Number(title="float", description="Float")
-    id = validators.Number(title="id", description="ID")
+    time = validators.DateTime(title="time", description="Time")
+    float = validators.Number(title="float", description="Float", allow_null=True)
+    bool = validators.Boolean(title="bool", description="Boolean")
     # array = validators.Array(validators.String(), title="array", description="Array")
 
 
 class PuppyResource(metaclass=Resource):
     name = "puppy"
     verbose_name = "Puppy"
+    columns = ("id", "name", "time")
 
     model = PuppyModel
-    input_type = PuppyType
-    output_type = PuppyType
+    input_type = PuppyInputType
+    output_type = PuppyOutputType
     methods = ("create", "retrieve", "update", "delete", "list", "drop")
 
     @classmethod
-    def list(cls, name: http.QueryParam, page: http.QueryParam, page_size: http.QueryParam) -> typing.List[PuppyType]:
+    def list(
+        cls, name: http.QueryParam, page: http.QueryParam, page_size: http.QueryParam
+    ) -> typing.List[PuppyOutputType]:
         return PageNumberResponse(content=cls._filter(name=name), page=page, page_size=page_size)
 
 
@@ -62,4 +76,6 @@ if __name__ == "__main__":
         package_prefix = "/static/" + package
         app.statics.whitenoise.add_files(package_dir, prefix=package_prefix)
 
+    app.document.title = "Demo"
+    app.document.description = "API Star CRUD Demo"
     app.serve("0.0.0.0", 8000, debug=True)

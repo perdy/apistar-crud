@@ -33,6 +33,10 @@ class BaseResource(type):
         namespace["name"] = resource_name
         namespace["verbose_name"] = namespace.get("verbose_name", namespace["name"])
 
+        # Default columns and order
+        namespace["columns"] = namespace.get("columns", ["id"])
+        namespace["order"] = namespace.get("order", "id")
+
         methods = namespace.get("methods", mcs.DEFAULT_METHODS)
 
         # Create CRUD methods and routes
