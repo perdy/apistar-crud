@@ -1,8 +1,6 @@
 {
   "author": "",
   "dependencies": {
-    "@material-ui/core": "^1.4.1",
-    "@material-ui/icons": "^1.1.0",
     "babel-runtime": "6.26.0",
     "classnames": "^2.2.6",
     "connected-react-router": "^4.3.0",
@@ -12,9 +10,9 @@
     "object-assign": "4.1.1",
     "optimize-css-assets-webpack-plugin": "^5.0.0",
     "prop-types": "^15.6.2",
-    "react": "^16.4.1",
+    "react": "^16.4.2",
     "react-dev-utils": "^5.0.1",
-    "react-dom": "^16.4.1",
+    "react-dom": "^16.4.2",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
     "react-tap-event-plugin": "^3.0.3",
@@ -25,7 +23,7 @@
     "semantic-ui-css": "^2.3.3",
     "semantic-ui-react": "^0.82.1",
     "superagent": "^3.8.3",
-    "swagger-client": "^3.8.10",
+    "swagger-client": "^3.8.11",
     "uglifyjs-webpack-plugin": "^1.2.7"
   },
   "description": "",
@@ -56,14 +54,13 @@
     "postcss-icss-values": "^2.0.1",
     "postcss-loader": "2.0.8",
     "postcss-preset-env": "^5.3.0",
-    "prettier": "^1.13.7",
-    "storybook-addon-material-ui": "^0.8.11",
+    "prettier": "^1.14.0",
     "style-loader": "0.19.0",
     "url-loader": "^0.6.2",
-    "webpack": "^4.16.2",
+    "webpack": "^4.16.4",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5",
-    "webpack-merge": "^4.1.3"
+    "webpack-merge": "^4.1.4"
   },
   "eslintConfig": {
     "extends": "react-app"

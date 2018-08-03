@@ -3,6 +3,7 @@ import { normalize } from "normalizr";
 import { delay } from "redux-saga";
 import { call, put, select, takeLatest } from "redux-saga/effects";
 import Api from "../api";
+import { fetchMetadataSuccess } from "../ducks/metadata";
 import {
   DELETE_RESOURCE_ELEMENT_REQUEST,
   deleteResourceElementFailure,
@@ -29,6 +30,13 @@ function* getSchema() {
     const metadata = yield call(Api.fetchMetadata);
     const { schema } = metadata;
     client = yield call(Api.fetchSwaggerSchema, schema);
+
+    yield put(
+      fetchMetadataSuccess({
+        ...metadata,
+        client
+      })
+    );
   }
 
   return client;
@@ -37,7 +45,7 @@ function* getSchema() {
 function* fetchResourceCollection({ payload }) {
   try {
     yield call(delay, 500);
-    const client = yield getSchema();
+    const client = yield call(getSchema);
     const resources = yield call(Api.fetchResourceCollection, payload, client);
     const entities = normalize(resources, { data: Schema.resourceCollection });
 
@@ -57,7 +65,7 @@ function* fetchResourceCollection({ payload }) {
       })
     );
   } catch (error) {
-    fetchResourceEntitiesFailure(error.message);
+    yield put(fetchResourceEntitiesFailure(error.message));
 
     if ("status" in error) {
       if (error.status === 404) {
@@ -66,6 +74,7 @@ function* fetchResourceCollection({ payload }) {
         yield put(push("/500"));
       }
     } else {
+      console.error(error);
       yield put(push("/404"));
     }
   }

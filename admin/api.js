@@ -6,16 +6,26 @@ const urls = {
 };
 
 export default class Api {
+  static getOperation(client, resource, verb, collection = true) {
+    const path = collection ? `/${resource}/` : `/${resource}/{element_id}/`;
+    const { operationId } = client.spec.paths[path][verb];
+    return client.apis[resource][operationId];
+  }
+
   static fetchMetadata() {
     return request.get(urls.metadata).then(response => response.body);
   }
 
   static fetchResourceCollection({ resourceName, query }, client) {
-    return client.apis[resourceName].list(query).then(response => response.body);
+    const operation = Api.getOperation(client, resourceName, "get");
+
+    return operation(query).then(response => response.body);
   }
 
   static fetchResourceElement({ resourceName, resourceId }, client) {
-    return client.apis[resourceName].retrieve({ element_id: resourceId }).then(response => response.body);
+    const operation = Api.getOperation(client, resourceName, "get", false);
+
+    return operation({ element_id: resourceId }).then(response => response.body);
   }
 
   static fetchSwaggerSchema(schemaUrl) {
@@ -23,16 +33,20 @@ export default class Api {
   }
 
   static submitResource({ resourceName, resourceData }, client) {
-    return client.apis[resourceName].create({}, { requestBody: resourceData }).then(response => response.body);
+    const operation = Api.getOperation(client, resourceName, "post");
+
+    return operation({}, { requestBody: resourceData }).then(response => response.body);
   }
 
   static updateResourceElement({ resourceName, resourceId, resourceData }, client) {
-    return client.apis[resourceName]
-      .update({ element_id: resourceId }, { requestBody: resourceData })
-      .then(response => response.body);
+    const operation = Api.getOperation(client, resourceName, "put", false);
+
+    return operation({ element_id: resourceId }, { requestBody: resourceData }).then(response => response.body);
   }
 
   static deleteResourceElement({ resourceName, resourceId }, client) {
-    return client.apis[resourceName].delete({ element_id: resourceId }).then(response => response.body);
+    const operation = Api.getOperation(client, resourceName, "delete", false);
+
+    return operation({ element_id: resourceId }).then(response => response.body);
   }
 }

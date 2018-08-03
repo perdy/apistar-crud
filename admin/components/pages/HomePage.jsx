@@ -25,9 +25,9 @@ class HomePage extends React.Component {
             <Menu.Item color="red" header>
               Resources
             </Menu.Item>
-            {Object.entries(resources).map(resource => (
-              <Menu.Item key={resource[1]} as={Link} to={`${resource[0]}/`} name={resource[0]}>
-                {resource[1]}
+            {Object.entries(resources).map(([k, v]) => (
+              <Menu.Item key={k} as={Link} to={`${k}/`} name={k}>
+                {v.verbose_name}
               </Menu.Item>
             ))}
           </Menu>

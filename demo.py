@@ -15,7 +15,7 @@ class PuppyModel(Model):
     name = peewee.CharField()
     number = peewee.IntegerField()
     time = peewee.DateTimeField()
-    float = peewee.FloatField()
+    float = peewee.FloatField(null=True)
     bool = peewee.BooleanField()
     # array = peewee.IntegerField()
 

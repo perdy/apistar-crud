@@ -1,4 +1,7 @@
 # Changes
+v0.6.1 - 2018-08-03
+ * Minor fixes on admin site.
+
 v0.6.0 - 2018-08-03
  * Revamp admin site.
 
