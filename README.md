@@ -7,6 +7,26 @@
 * **Status:** Production/Stable
 * **Author:** José Antonio Perdiguero López
 
+## Table of Contents
+
+- [API Star CRUD](#api-star-crud)
+  * [Features](#features)
+    + [Resource](#resource)
+    + [ORM](#orm)
+    + [Admin site](#admin-site)
+  * [Quick start](#quick-start)
+  * [Usage](#usage)
+    + [SQLAlchemy](#sqlalchemy)
+    + [Peewee](#peewee)
+  * [Resources](#resources)
+    + [Routes](#routes)
+    + [Override methods](#override-methods)
+    + [Filtering](#filtering)
+  * [Admin](#admin)
+    + [Main page](#main-page)
+    + [Resource list](#resource-list)
+    + [Resource detail](#resource-detail)
+
 ## Features
 API Star CRUD provides an easy way to define a REST resource and generic operations over it.
 
@@ -25,7 +45,7 @@ API Star CRUD supports the following ORM:
 * [Peewee](https://github.com/coleifer/peewee) through [apistar-peewee-orm](https://github.com/PeRDy/apistar-peewee-orm).
 
 ### Admin site
-API Star CRUD serves an admin site to handle resources in a graphical way, by default this site is routed to `/admin/`. 
+API Star CRUD serves an admin site to handle resources in a graphical way, by default this site is routed to `/admin`. 
 
 ## Quick start
 Install API Star CRUD:
@@ -93,14 +113,14 @@ The resource generates his own **routes**:
 from apistar import App
 from apistar_crud.routes import routes as resource_routes
 
-resource_routes.register(PuppyResource, "/puppy/", admin=True)
+resource_routes.register(PuppyResource, "/puppy", admin=True)
 
 routes = [
     # ... your app routes
 ]
 
-routes += resource_routes.routes(admin="/admin/")
-packages = ("apistar", "apistar_crud")
+routes += resource_routes.routes(admin="/admin")
+packages = ("apistar_crud",)
 app = App(routes=routes, packages=packages)
 ```
 
@@ -146,14 +166,14 @@ The resource generates his own **routes**:
 from apistar import App
 from apistar_crud.routes import routes as resource_routes
 
-resource_routes.register(PuppyResource, "/puppy/", admin=True)
+resource_routes.register(PuppyResource, "/puppy", admin=True)
 
 routes = [
     # ... your app routes
 ]
 
-routes += resource_routes.routes(admin="/admin/")
-packages = ("apistar", "apistar_crud")
+routes += resource_routes.routes(admin="/admin")
+packages = ("apistar_crud",)
 app = App(routes=routes, packages=packages)
 ```
 
@@ -219,3 +239,40 @@ class PuppyResource(metaclass=Resource):
     def list(cls, name: http.QueryParam, page: http.QueryParam=None, page_size: http.QueryParam=None) -> typing.List[PuppyOutputType]:
         return PageNumberResponse(page=page, page_size=page_size, content=cls._filter(name=name))
 ```
+
+## Admin
+API Star CRUD provides an admin panel to manage resources, including filtering, editing and creating new entries in your 
+resources.
+
+To include admin panel in your application you simply has to add the routes as following:
+
+```python
+from apistar import App
+from apistar_crud.routes import routes as resource_routes
+
+resource_routes.register(PuppyResource, "/puppy", admin=True)
+
+routes = [
+    # ... your app routes
+]
+
+routes += resource_routes.routes(admin="/admin")
+packages = ("apistar_crud",)
+app = App(routes=routes, packages=packages)
+```
+
+### Main page
+Main page showing a list of manageable resources.
+
+![Admin main page](docs/images/admin_landing.png "Main page showing a list of manageable resources")
+
+### Resource list
+Configurable view of a list of resource entries. If that resource provides filtering parameters for list method, a 
+filter input will be available. The list of columns shown is also configurable.
+
+![Admin resource list page](docs/images/admin_resource_list.png "Configurable view of a list of resource entries")
+
+### Resource detail
+Page for editing a resource entry or creating a new one.
+
+![Admin resource detail page](docs/images/admin_resource_detail.png "Page for editing a resource entry or create a new one")

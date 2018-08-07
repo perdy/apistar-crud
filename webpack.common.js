@@ -48,11 +48,10 @@ module.exports = {
             loader: "css-loader"
           }
         ]
-        // loader: 'style-loader!css-loader',
       },
       {
         test: /\.(png|woff|woff2|eot|ttf|svg)$/,
-        loader: "url-loader?limit=100000"
+        loader: "url-loader?limit=8192"
       }
     ]
   },
@@ -75,7 +74,7 @@ module.exports = {
     runtimeChunk: true
   },
   plugins: [
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/), // ignore moment js locales for now
+    new webpack.IgnorePlugin(/^\.\/locale$/, /lodash$/), // ignore moment js locales for now
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
@@ -86,6 +85,6 @@ module.exports = {
   ],
   output: {
     path: path.resolve(__dirname, "apistar_crud/static"),
-    publicPath: "apistar_crud/static/"
+    publicPath: "/static/apistar_crud/"
   }
 };

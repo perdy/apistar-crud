@@ -1,4 +1,9 @@
 # Changes
+v0.6.3 - 2018-08-07
+ * Admin filtering on resource list page shown only if filters are available.
+ * Fix columns dropdown on resource list page.
+ * Minimize css for production bundle.
+
 v0.6.2 - 2018-08-03
  * Minor fixes on admin site.
  

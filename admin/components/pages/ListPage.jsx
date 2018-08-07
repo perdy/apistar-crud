@@ -128,68 +128,85 @@ class ListPage extends React.Component {
     this.setState({ ...this.state, columns: [...columns] });
   }
 
-  renderMenu() {
-    const { url } = this.props;
-
+  renderMenuFilter() {
     const filterOptions = this.filterParameters.map(item => ({ key: item.name, text: item.name, value: item.name }));
+
+    if (filterOptions.length > 0) {
+      return (
+        <Menu.Item>
+          <Input
+            name="value"
+            onChange={this.handleChange}
+            icon="filter"
+            iconPosition="left"
+            placeholder="Filter..."
+            action={
+              <Dropdown
+                onChange={this.handleChange}
+                name="filter"
+                placeholder="Filter"
+                compact
+                selection
+                search
+                options={filterOptions}
+              />
+            }
+          />
+        </Menu.Item>
+      );
+    }
+
+    return null;
+  }
+
+  renderMenuColumns() {
     const columnsOptions = Object.entries(this.fields).map(([k, v]) => ({
       key: k,
       text: v.description || v.title || k,
       value: k
     }));
 
-    const columns = this.columns;
+    return (
+      <Dropdown
+        item
+        name="columns"
+        text="Columns"
+        open={this.state.columnsOpen}
+        onClick={e => {
+          e.preventDefault();
+          this.setState({ ...this.state, columnsOpen: !this.state.columnsOpen });
+        }}
+        onBlur={e => {
+          e.preventDefault();
+          this.setState({ ...this.state, columnsOpen: false });
+        }}
+      >
+        <Dropdown.Menu>
+          <Dropdown.Header icon="columns" content="Columns" />
+          <Dropdown.Menu scrolling>
+            {columnsOptions.map(option => (
+              <Dropdown.Item
+                selected={option.value in this.columns}
+                onClick={this.handleSelect}
+                key={option.value}
+                {...option}
+              />
+            ))}
+          </Dropdown.Menu>
+        </Dropdown.Menu>
+      </Dropdown>
+    );
+  }
+
+  renderMenu() {
+    const { url } = this.props;
 
     return (
       <Menu size="large" attached="top">
         <Menu.Item header>{this.verboseName}</Menu.Item>
         <Menu.Menu position="right">
-          <Menu.Item>
-            <Input
-              name="value"
-              onChange={this.handleChange}
-              icon="filter"
-              iconPosition="left"
-              placeholder="Filter..."
-              action={
-                <Dropdown
-                  onChange={this.handleChange}
-                  name="filter"
-                  placeholder="Filter"
-                  compact
-                  selection
-                  search
-                  options={filterOptions}
-                />
-              }
-            />
-          </Menu.Item>
-          <Dropdown
-            item
-            name="columns"
-            text="Columns"
-            open={this.state.columnsOpen}
-            onFocus={() => {
-              this.setState({ ...this.state, columnsOpen: true });
-            }}
-            onBlur={() => {
-              this.setState({ ...this.state, columnsOpen: false });
-            }}
-          >
-            <Dropdown.Menu>
-              <Dropdown.Header icon="columns" content="Columns" />
-              <Dropdown.Menu scrolling>
-                {columnsOptions.map(option => (
-                  <Dropdown.Item
-                    selected={option.value in columns}
-                    onClick={this.handleSelect}
-                    key={option.value}
-                    {...option}
-                  />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown.Menu>
-          </Dropdown>
+          {this.renderMenuFilter()}
+          {this.renderMenuColumns()}
           <Menu.Item>
             <Button primary as={Link} to={`${url}${this.resourceName}/new/`}>
               Create
