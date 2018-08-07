@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "apistar-crud"
-version = "0.6.2"
+version = "0.6.3"
 description = "API Star tools to create CRUD resources."
 authors = ["José Antonio Perdiguero López <perdy@perdy.io>"]
 license = "GPL-3.0+"
