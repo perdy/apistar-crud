@@ -1,4 +1,7 @@
 # Changes
+v0.6.4 - 2018-09-04
+ * Update model supports modifying object id.
+
 v0.6.3 - 2018-08-07
  * Admin filtering on resource list page shown only if filters are available.
  * Fix columns dropdown on resource list page.

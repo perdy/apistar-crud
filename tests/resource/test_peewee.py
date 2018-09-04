@@ -12,6 +12,7 @@ database_component = PeeweeDatabaseComponent(url="sqlite+pool://")
 
 
 class PuppyModel(peewee.Model):
+    id = peewee.IntegerField(primary_key=True)
     name = peewee.CharField()
 
     class Meta:
@@ -19,11 +20,12 @@ class PuppyModel(peewee.Model):
 
 
 class PuppyInputType(types.Type):
-    name = validators.String()
+    id = validators.Integer(allow_null=True, default=None)
+    name = validators.String(allow_null=True)
 
 
 class PuppyOutputType(types.Type):
-    id = validators.Integer(allow_null=True, default=None)
+    id = validators.Integer()
     name = validators.String()
 
 
@@ -54,12 +56,12 @@ async_app = ASyncApp(routes=routes, components=components, event_hooks=event_hoo
 
 @pytest.fixture
 def puppy():
-    return {"name": "canna"}
+    return {"id": 1, "name": "canna"}
 
 
 @pytest.fixture
 def another_puppy():
-    return {"name": "puppito"}
+    return {"id": 2, "name": "puppito"}
 
 
 @pytest.fixture(params=[app, async_app])
@@ -118,6 +120,24 @@ class TestCasePeeweeCRUD:
         response = client.get("/puppy/")
         assert response.status_code == 200
         assert response.json()["data"] == [updated_puppy]
+
+    def test_update_without_modifying_id(self, client, puppy, another_puppy):
+        # Successfully create a new record
+        response = client.post("/puppy/", json=puppy)
+        assert response.status_code == 201
+        created_puppy = response.json()
+        assert created_puppy["name"] == "canna"
+
+        # Update record
+        response = client.put("/puppy/{}/".format(created_puppy["id"]), json={"name": "puppito"})
+        assert response.status_code == 200
+        updated_puppy = response.json()
+        assert updated_puppy["name"] == "puppito"
+
+        # List all the existing records
+        response = client.get("/puppy/")
+        assert response.status_code == 200
+        assert response.json()["data"] == [{"id": 1, "name": "puppito"}]
 
     def test_update_not_found(self, client, puppy):
         # Retrieve wrong record

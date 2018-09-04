@@ -12,7 +12,7 @@ exclude = []
 
 [tool.poetry.dependencies]
 python = "^3.6"
-apistar = "^0.5.30"
+apistar = "^0.5.41"
 apistar-pagination = "^0.3.0"
 
 [tool.poetry.dev-dependencies]

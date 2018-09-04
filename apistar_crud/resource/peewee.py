@@ -48,10 +48,18 @@ class Resource(BaseResource):
             except DoesNotExist:
                 raise NotFound
 
-            for k, value in element.items():
+            fields = dict(element)
+            if element.id is None:
+                del fields["id"]
+
+            for k, value in fields.items():
                 setattr(record, k, value)
 
-            record.save()
+            if element.id is None:
+                record.save()
+            else:
+                model.delete_by_id(element_id)
+                record.save(force_insert=True)
 
             return http.JSONResponse(output_type(record), status_code=200)
 
