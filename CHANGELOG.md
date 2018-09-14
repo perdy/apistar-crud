@@ -1,4 +1,8 @@
 # Changes
+v0.6.5 - 2018-09-04
+ * Robust id check on update.
+ * Remove empty id on create.
+
 v0.6.4 - 2018-09-04
  * Update model supports modifying object id.
 

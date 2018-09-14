@@ -17,7 +17,11 @@ class Resource(BaseResource):
             """
             Create a new element for this resource.
             """
-            record = model.create(**element)
+            fields = dict(element)
+            if fields.get("id") is None:
+                del fields["id"]
+
+            record = model.create(**fields)
             return http.JSONResponse(output_type(record), status_code=201)
 
         return {"_create": classmethod(create)}
@@ -49,13 +53,13 @@ class Resource(BaseResource):
                 raise NotFound
 
             fields = dict(element)
-            if element.id is None:
+            if fields.get("id") is None:
                 del fields["id"]
 
             for k, value in fields.items():
                 setattr(record, k, value)
 
-            if element.id is None:
+            if fields.get("id") is None:
                 record.save()
             else:
                 model.delete_by_id(element_id)
