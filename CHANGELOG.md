@@ -1,4 +1,7 @@
 # Changes
+v0.6.6 - 2018-10-08
+ * Upgrade apistar-pagination version.
+
 v0.6.5 - 2018-09-04
  * Robust id check on update.
  * Remove empty id on create.
